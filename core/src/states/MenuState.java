@@ -7,6 +7,7 @@ package states;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  *
@@ -29,5 +30,28 @@ public class MenuState extends State {
         
         
     }
+
+    @Override
+    public void render(SpriteBatch batch) {
+      batch.begin();
+      batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void handleInput() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
 }
