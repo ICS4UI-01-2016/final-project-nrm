@@ -22,7 +22,7 @@ public class PlayState extends State{
         
         setCameraView(MyGdxGame.WIDTH / 2, MyGdxGame.HEIGHT / 2);
         
-        bg = new Texture("bg.jpg");
+        bg = new Texture("Galaga_Background.png");
   
         
         
