@@ -26,7 +26,7 @@ public class MenuState extends State {
     public MenuState(StateManager sm) {
         super(sm);
         //add the backround texture image
-        bg = new Texture("Backround.jpg");
+        bg = new Texture("Backround.png");
 
     }
 
