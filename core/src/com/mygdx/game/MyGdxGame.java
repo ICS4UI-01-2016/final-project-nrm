@@ -34,6 +34,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         
+        
         stateManager.render(batch);
     }
 
