@@ -4,9 +4,12 @@
  */
 package states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Player;
 
 /**
  *
@@ -14,13 +17,17 @@ import com.mygdx.game.MyGdxGame;
  */
 public class PlayState extends State{
     
+    private Player player;
     private SpriteBatch batch;
     private Texture bg;
     
+    public final int PLAYER_WIDTH = 28;
+    public final int PLAYER_HEIGHT = 30;
+    
     public PlayState(StateManager sm){
         super(sm);
-        
-        setCameraView(MyGdxGame.WIDTH / 2, MyGdxGame.HEIGHT / 2);
+        player = new Player(MyGdxGame.WIDTH/2 - PLAYER_WIDTH/2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
+        setCameraView(MyGdxGame.WIDTH , MyGdxGame.HEIGHT );
         
         bg = new Texture("Galaga_Background.png");
   
@@ -35,18 +42,31 @@ public class PlayState extends State{
         
         batch.begin();
         
-        batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2);
+        batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH , MyGdxGame.HEIGHT);
+        
+        player.render(batch);
         
         batch.end();
     }
 
     @Override
     public void update(float deltaTime) {
+        player.update(deltaTime);
+        
         
     }
 
     @Override
     public void handleInput() {
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < bg.getWidth()){
+            player.moveRight();
+        } //keydown keyup boolean
+        else if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getX() > 0){
+            player.moveLeft(); 
+        }else{
+            player.zeroVelocity();
+        }
+        
         
     }
 
