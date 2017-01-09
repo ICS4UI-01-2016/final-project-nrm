@@ -58,9 +58,9 @@ public class PlayState extends State{
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < bg.getWidth()){
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < MyGdxGame.WIDTH){
             player.moveRight();
-        } //keydown keyup boolean
+        }
         else if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getX() > 0){
             player.moveLeft(); 
         }else{
