@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import states.MenuState;
 import states.PlayState;
 import states.State;
 import states.StateManager;
@@ -23,7 +22,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 0, 0, 1);
 
         stateManager = new StateManager();
-        State firstScreen = new MenuState(stateManager);
+        State firstScreen = new PlayState(stateManager);
         stateManager.push(firstScreen);// load the first screen
 
     }
@@ -33,9 +32,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-         // handle input
+        
         stateManager.handleInput();
-        // update the game states
         stateManager.update(Gdx.graphics.getDeltaTime());
         
         stateManager.render(batch);
