@@ -18,6 +18,7 @@ import com.mygdx.game.Player;
  */
 public class PlayState extends State{
     
+    private Enemy[] enemy;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
@@ -52,6 +53,10 @@ public class PlayState extends State{
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH , MyGdxGame.HEIGHT);
         
         player.render(batch);
+        
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i].render(batch);
+        }
         
         batch.end();
     }
