@@ -9,28 +9,31 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Enemy;
+import com.mygdx.game.GreenEnemy;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Player;
+import com.mygdx.game.RedEnemy;
 
 /**
  *
  * @author voigr4865
  */
-public class PlayState extends State{
-    
+public class PlayState extends State {
+
     private Enemy[] enemy;
+    private RedEnemy[] redEnemy;
+    private GreenEnemy[] green;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
-    
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
-    
-    public PlayState(StateManager sm){
+
+    public PlayState(StateManager sm) {
         super(sm);
-        player = new Player(MyGdxGame.WIDTH/2 - PLAYER_WIDTH/2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
-        setCameraView(MyGdxGame.WIDTH , MyGdxGame.HEIGHT );
-        
+        player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
+        setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+
         bg = new Texture("Galaga_Background.png");
 
         enemy = new Enemy[10];
@@ -39,9 +42,22 @@ public class PlayState extends State{
             enemy[i] = new Enemy(150 + (count * 30), 360);
             count++;
         }
-      
+
+        redEnemy = new RedEnemy[8];
+        int c = 0;
+        for (int i = 0; i < redEnemy.length; i++) {
+            redEnemy[i] = new RedEnemy(180 + (c * 30), 425);
+            c++;
+        }
+
+        green = new GreenEnemy[4];
+        int x = 0;
+        for (int i = 0; i < green.length; i++) {
+            green[i] = new GreenEnemy(238 + (x * 30), 490);
+            x++;
+        }
+
     }
-    
 
     @Override
     public void render(SpriteBatch batch) {
@@ -49,37 +65,44 @@ public class PlayState extends State{
         batch.setProjectionMatrix(getCombinedCamera());
 
         batch.begin();
-        
-        batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH , MyGdxGame.HEIGHT);
-        
+
+        batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+
         player.render(batch);
-        
+
         for (int i = 0; i < enemy.length; i++) {
             enemy[i].render(batch);
         }
+
+        for (int i = 0; i < redEnemy.length; i++) {
+            redEnemy[i].render(batch);
+        }
         
+        for (int i = 0; i < green.length; i++) {
+            green[i].render(batch);
+        }
+
         batch.end();
     }
 
     @Override
     public void update(float deltaTime) {
         player.update(deltaTime);
-        
-        
+
+
     }
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < MyGdxGame.WIDTH){
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX() + PLAYER_WIDTH < MyGdxGame.WIDTH) {
             player.moveRight();
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getX() > 0){
-            player.moveLeft(); 
-        }else{
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getX() > 0) {
+            player.moveLeft();
+        } else {
             player.zeroVelocity();
         }
-        
-        
+
+
     }
 
     @Override
