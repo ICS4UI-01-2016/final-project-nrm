@@ -44,6 +44,8 @@ public class PlayState extends State {
         
         bg = new Texture("Galaga_Background.png");
 
+        batch = new SpriteBatch();
+        
         enemy = new Enemy[10];
         int count = 0;
         for (int i = 0; i < enemy.length; i++) {
