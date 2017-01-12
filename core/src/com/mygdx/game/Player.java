@@ -28,11 +28,11 @@ public class Player {
     }
     
     public void moveLeft(){
-        velocityX = -75;
+        velocityX = -90;
     }
     
     public void moveRight(){
-        velocityX = 75;
+        velocityX = 90;
     }
     
     public void zeroVelocity(){

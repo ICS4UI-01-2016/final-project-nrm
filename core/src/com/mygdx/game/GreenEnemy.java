@@ -12,30 +12,27 @@ import com.badlogic.gdx.math.Rectangle;
  *
  * @author voigr4865
  */
-public class RedEnemy {
+public class GreenEnemy {
     
-    private Texture topRed;
-    private Texture bottomRed;
-    private Rectangle bounds1;
-    private Rectangle bounds2;
+    private Texture green;
+    private Rectangle bounds;
     private int enemyX;
     private int enemyY;
     
-    public RedEnemy(int x, int y){
+    public GreenEnemy(int x, int y){
         
         enemyX = x;
         enemyY = y;
         
-        topRed = new Texture("Galaga_Enemy2.png");
-        bottomRed = new Texture("Galaga_Enemy2.png");
+        green = new Texture("Galaga_Enemy3.png");
         
-        bounds1 = new Rectangle(enemyX, enemyY, topRed.getWidth(), topRed.getHeight());
-        bounds2 = new Rectangle(enemyX, enemyY, bottomRed.getHeight(), bottomRed.getWidth());
+        bounds = new Rectangle(enemyX, enemyY, green.getWidth(), green.getHeight());
+        
     }
     
-    public void render(SpriteBatch batch) {
-        batch.draw(topRed, enemyX, enemyY);
-        batch.draw(bottomRed, enemyX, enemyY + 30);
+     public void render(SpriteBatch batch) {
+        batch.draw(green, enemyX, enemyY);
+        
     }
     
     public void update(float deltaTime){
@@ -50,4 +47,5 @@ public class RedEnemy {
     public int getY(){
         return enemyY;
     }
+    
 }
