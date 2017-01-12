@@ -28,8 +28,11 @@ public class PlayState extends State {
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
+
+
     private Array<Missile> missile;
     private int missileCount;
+
     
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
@@ -89,6 +92,12 @@ public class PlayState extends State {
         }
         
 
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i].render(batch);
+        }
+        
+
+
         for(int i = 0; i < missile.size; i++){
             missile.get(i).render(batch);
         }
@@ -97,6 +106,7 @@ public class PlayState extends State {
         for (int i = 0; i < green.length; i++) {
             green[i].render(batch);
         }
+
 
 
         batch.end();
