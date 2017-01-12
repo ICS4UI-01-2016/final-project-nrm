@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Enemy;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Player;
 
@@ -30,16 +31,22 @@ public class PlayState extends State{
         setCameraView(MyGdxGame.WIDTH , MyGdxGame.HEIGHT );
         
         bg = new Texture("Galaga_Background.png");
-  
-        
-        
+
+        enemy = new Enemy[10];
+        int count = 0;
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i] = new Enemy(150 + (count * 30), 360);
+            count++;
+        }
+      
     }
     
+
     @Override
-    public void render(SpriteBatch batch){
-        
+    public void render(SpriteBatch batch) {
+
         batch.setProjectionMatrix(getCombinedCamera());
-        
+
         batch.begin();
         
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH , MyGdxGame.HEIGHT);
@@ -58,9 +65,9 @@ public class PlayState extends State{
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < bg.getWidth()){
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX()+PLAYER_WIDTH < MyGdxGame.WIDTH){
             player.moveRight();
-        } //keydown keyup boolean
+        }
         else if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.getX() > 0){
             player.moveLeft(); 
         }else{
@@ -72,7 +79,5 @@ public class PlayState extends State{
 
     @Override
     public void dispose() {
-        
     }
-    
 }

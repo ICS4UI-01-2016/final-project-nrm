@@ -36,6 +36,7 @@ public class MyGdxGame extends ApplicationAdapter {
         stateManager.handleInput();
         stateManager.update(Gdx.graphics.getDeltaTime());
         
+        
         stateManager.render(batch);
     }
 
