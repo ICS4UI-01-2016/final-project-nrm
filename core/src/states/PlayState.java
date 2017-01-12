@@ -21,6 +21,7 @@ public class PlayState extends State{
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
+    private Enemy[] enemy;
     
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
@@ -52,6 +53,10 @@ public class PlayState extends State{
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH , MyGdxGame.HEIGHT);
         
         player.render(batch);
+        
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i].render(batch);
+        }
         
         batch.end();
     }

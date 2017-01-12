@@ -27,6 +27,7 @@ public class MenuState extends State {
     private int highScore;
     //the font
     public BitmapFont font;
+    public BitmapFont SmallFont;
     
     
 
@@ -43,12 +44,39 @@ public class MenuState extends State {
         //actually generate the font         
         FreeTypeFontGenerator.FreeTypeFontParameter();
         //chaze the size of th font 
-        fontParameter.size = 36;
+        fontParameter.size = 44;
         
         font= fontGenerator.generateFont(fontParameter);
       
         //set camera view
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
+        
+        //THE SECOND FONT 
+        FreeTypeFontGenerator fontGenerator2 = new //grab the font from the fonts avalible in assets 
+        FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+        //create the new font type 
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter2 = new //FreeTypeFontGenerator.FreeTypeFontParameter fontParamter2=new        
+        //actually generate the font         
+        FreeTypeFontGenerator.FreeTypeFontParameter();
+        //chaze the size of th font 
+        fontParameter.size = 28;
+
+        SmallFont = fontGenerator.generateFont(fontParameter2);
+        //set camera view
+        SmallFont.setColor(com.badlogic.gdx.graphics.Color.GREEN);
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         
     }
@@ -61,9 +89,11 @@ public class MenuState extends State {
         batch.begin();
         
        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
+       //draw the game "name" on the menue screen 
        font.draw(batch, "GALAGA", getViewWidth()-400, getViewHeight()-350);
-       
-       font.draw(batch, "Press Enter to start", getViewWidth()-500, getViewHeight()-500);
+       //tell user to "press enter to start the game.
+       font.draw(batch, "Press space to Continue ", getViewWidth()-575, getViewHeight()-500);
+     
        
         batch.end();
     }
@@ -85,11 +115,17 @@ public class MenuState extends State {
             //get the statemanager 
              StateManager gsm = getStateManager();
              //push on game screen
-             gsm.push(new PlayState(gsm));
+             gsm.push(new ControlState(gsm));
         }
 
+       
+        
+        
     }
 
+    /**
+     *
+     */
     @Override
     public void dispose() {
         bg.dispose();
