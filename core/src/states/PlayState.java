@@ -8,8 +8,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Enemy;
 import com.mygdx.game.GreenEnemy;
+import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Player;
 import com.mygdx.game.RedEnemy;
@@ -26,14 +28,23 @@ public class PlayState extends State {
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
+
+
+    private Array<Missile> missile;
+    private int missileCount;
+
+    
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
 
     public PlayState(StateManager sm) {
         super(sm);
-        player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
-        setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-
+        player = new Player(MyGdxGame.WIDTH/2 - PLAYER_WIDTH/2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
+        missile = new Array<Missile>();
+        missileCount = 0;
+        
+        setCameraView(MyGdxGame.WIDTH , MyGdxGame.HEIGHT );
+        
         bg = new Texture("Galaga_Background.png");
 
         enemy = new Enemy[10];
@@ -78,9 +89,23 @@ public class PlayState extends State {
             redEnemy[i].render(batch);
         }
         
+
+        for (int i = 0; i < enemy.length; i++) {
+            enemy[i].render(batch);
+        }
+        
+
+
+        for(int i = 0; i < missile.size; i++){
+            missile.get(i).render(batch);
+        }
+        
+
         for (int i = 0; i < green.length; i++) {
             green[i].render(batch);
         }
+
+
 
         batch.end();
     }
@@ -88,6 +113,22 @@ public class PlayState extends State {
     @Override
     public void update(float deltaTime) {
         player.update(deltaTime);
+
+        
+        for(int i = 0; i < missile.size; i++){
+            missile.get(i).update(deltaTime);
+        }
+        
+        
+//        Iterator<Missile> it = missile.iterator();
+//        while(it.hasNext()){
+//            Missile m = it.next();
+//            if(/when do i remove missiles?){
+//                it.remove();
+//            }
+//        }
+
+
 
 
     }
@@ -102,10 +143,23 @@ public class PlayState extends State {
             player.zeroVelocity();
         }
 
+        
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            missile.add(new Missile(player.getX() + PLAYER_WIDTH/2 - 3, player.getY() + PLAYER_HEIGHT));
+            missileCount++;
+        }
+        
+        
+
+
+
 
     }
 
     @Override
     public void dispose() {
+
+        player.dispose();
+
     }
 }
