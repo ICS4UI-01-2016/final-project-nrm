@@ -23,53 +23,74 @@ import java.util.Iterator;
  */
 public class PlayState extends State {
 
-    private Enemy[] enemy;
-    private RedEnemy[] redEnemy;
-    private GreenEnemy[] green;
+    private Array<Enemy> enemy;
+    private Array<RedEnemy> redEnemy;
+    private Array<GreenEnemy> green;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
-
-
     private Array<Missile> missile;
-    private int missileCount;
-
-    
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
 
     public PlayState(StateManager sm) {
         super(sm);
-        player = new Player(MyGdxGame.WIDTH/2 - PLAYER_WIDTH/2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
+        player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
         missile = new Array<Missile>();
-        missileCount = 0;
         
-        setCameraView(MyGdxGame.WIDTH , MyGdxGame.HEIGHT );
-        
+        setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+
         bg = new Texture("Galaga_Background.png");
 
+
         batch = new SpriteBatch();
-        
-        enemy = new Enemy[10];
+
+
+
+
+        enemy = new Array<Enemy>();
+
         int count = 0;
-        for (int i = 0; i < enemy.length; i++) {
-            enemy[i] = new Enemy(150 + (count * 30), 360);
+        int y = 360;
+        for (int i = 0; i < 8; i++) {
+            enemy.add(new Enemy(150 + (count * 30), y));
+//            y = 390;
+//            enemy.add(new Enemy(150+(count * 30), y));
+//            y= 360;
             count++;
         }
 
-        redEnemy = new RedEnemy[8];
-        int c = 0;
-        for (int i = 0; i < redEnemy.length; i++) {
-            redEnemy[i] = new RedEnemy(180 + (c * 30), 425);
-            c++;
-        }
+//        redEnemy = new Array<RedEnemy>();
+//        int count1 = 0;
+//        int y1 = 450;
+//        for (int i = 0; i < 20; i++) {
+//            redEnemy.add(new RedEnemy(180 + (count1 * 30), y1));
+//            y1 = 480;
+//            redEnemy.add(new RedEnemy(180 + (count1 * 30), y1));
+//            y1 = 450;
+//            count1++;
+//        }
 
-        green = new GreenEnemy[4];
-        int x = 0;
-        for (int i = 0; i < green.length; i++) {
-            green[i] = new GreenEnemy(238 + (x * 30), 490);
-            x++;
-        }
+//        enemy = new Enemy[10];
+//        int count = 0;
+//        for (int i = 0; i < enemy.length; i++) {
+//            enemy[i] = new Enemy(150 + (count * 30), 360);
+//            count++;
+//        }
+//
+//        redEnemy = new RedEnemy[8];
+//        int c = 0;
+//        for (int i = 0; i < redEnemy.length; i++) {
+//            redEnemy[i] = new RedEnemy(180 + (c * 30), 425);
+//            c++;
+//        }
+//
+//        green = new GreenEnemy[4];
+//        int x = 0;
+//        for (int i = 0; i < green.length; i++) {
+//            green[i] = new GreenEnemy(238 + (x * 30), 490);
+//            x++;
+//        }
 
     }
 
@@ -84,55 +105,71 @@ public class PlayState extends State {
 
         player.render(batch);
 
-        for (int i = 0; i < enemy.length; i++) {
-            enemy[i].render(batch);
-        }
-
-        for (int i = 0; i < redEnemy.length; i++) {
-            redEnemy[i].render(batch);
-        }
-        
-
-        for (int i = 0; i < enemy.length; i++) {
-            enemy[i].render(batch);
-        }
-        
-
-
-        for(int i = 0; i < missile.size; i++){
+//        for (int i = 0; i < enemy.length; i++) {
+//            enemy[i].render(batch);
+//        }
+//
+//        for (int i = 0; i < redEnemy.length; i++) {
+//            redEnemy[i].render(batch);
+//        }
+//        
+//
+//        for (int i = 0; i < enemy.length; i++) {
+//            enemy[i].render(batch);
+//        }
+//        
+//
+//
+        for (int i = 0; i < missile.size; i++) {
             missile.get(i).render(batch);
         }
-        
+//        
+//
+//        for (int i = 0; i < green.length; i++) {
+//            green[i].render(batch);
+//        }
 
-        for (int i = 0; i < green.length; i++) {
-            green[i].render(batch);
+        for (int i = 0; i < enemy.size; i++) {
+            enemy.get(i).render(batch);
         }
 
+//        for(int i = 0; i < 8; i++){
+//            redEnemy.get(i).render(batch);
+//        }
 
 
-        batch.end();
+
+batch.end();
     }
 
     @Override
     public void update(float deltaTime) {
         player.update(deltaTime);
 
-        
-        for(int i = 0; i < missile.size; i++){
+
+        for (int i = 0; i < missile.size; i++) {
             missile.get(i).update(deltaTime);
         }
-        
-       Iterator<Missile> it = missile.iterator();
-       while(it.hasNext()){
+
+        Iterator<Missile> it = missile.iterator();
+        while (it.hasNext()) {
             Missile m = it.next();
-           if(m.getY() > 700){
-               it.remove();
-          }
+            if (m.getY() > 700) {
+                it.remove();
+            }else{
+                Iterator<Enemy> ite = enemy.iterator();
+                while (ite.hasNext()) {
+                    Enemy e = ite.next();
+                    if (m.collides(e)){
+                        it.remove();
+                        ite.remove();
+                        break;
+                    }
+                }
+            }
         }
-       //collisions
-//       for(int i = 0; i < missile.size; i++){
-//           if(missile.get(i).collides()
-//       }
+        //collisions
+        
 
 
 
@@ -149,12 +186,12 @@ public class PlayState extends State {
         }
 
         
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            missile.add(new Missile(player.getX() + PLAYER_WIDTH/2 - 3, player.getY() + PLAYER_HEIGHT));
-            missileCount++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            missile.add(new Missile(player.getX() + PLAYER_WIDTH / 2 - 3, player.getY() + PLAYER_HEIGHT));
+
         }
-        
-        
+
+
 
 
 

@@ -14,10 +14,10 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class RedEnemy {
     
-    private Texture topRed;
-    private Texture bottomRed;
-    private Rectangle bounds1;
-    private Rectangle bounds2;
+    private Texture red;
+    
+    private Rectangle bounds;
+    
     private int enemyX;
     private int enemyY;
     
@@ -26,16 +26,16 @@ public class RedEnemy {
         enemyX = x;
         enemyY = y;
         
-        topRed = new Texture("Galaga_Enemy2.png");
-        bottomRed = new Texture("Galaga_Enemy2.png");
+        red = new Texture("Galaga_Enemy2.png");
         
-        bounds1 = new Rectangle(enemyX, enemyY, topRed.getWidth(), topRed.getHeight());
-        bounds2 = new Rectangle(enemyX, enemyY, bottomRed.getHeight(), bottomRed.getWidth());
+        
+        bounds = new Rectangle(enemyX, enemyY, red.getWidth(), red.getHeight());
+        
     }
     
     public void render(SpriteBatch batch) {
-        batch.draw(topRed, enemyX, enemyY);
-        batch.draw(bottomRed, enemyX, enemyY + 30);
+        batch.draw(red, enemyX, enemyY);
+       
     }
     
     public void update(float deltaTime){
