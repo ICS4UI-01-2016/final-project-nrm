@@ -18,9 +18,8 @@ public class Missile {
     private Texture missileTexture;
     private Rectangle bounds;
     private boolean hasHit;
-    private boolean leftScreen;
     
-    private final float UPWARDS_VELOCITY = 90;
+    private final float UPWARDS_VELOCITY = 150;
     
     
     public Missile(float x, float y){
@@ -46,5 +45,15 @@ public class Missile {
         missileTexture.dispose();
     }
     
+    public float getY(){
+        return missileY;
+    }
     
+    public boolean collides(Enemy e){
+        if(bounds.overlaps(e.getBounds())){
+            return true;
+        }
+        
+        return false;
+    }
 }

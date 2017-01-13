@@ -50,4 +50,8 @@ public class Enemy {
         return enemyY;
     }
     
+    public Rectangle getBounds(){
+        return bounds2;
+    }
+    
 }
