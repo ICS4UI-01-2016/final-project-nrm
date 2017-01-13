@@ -15,6 +15,7 @@ import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Player;
 import com.mygdx.game.RedEnemy;
+import java.util.Iterator;
 
 /**
  *
@@ -121,15 +122,17 @@ public class PlayState extends State {
             missile.get(i).update(deltaTime);
         }
         
-        
-//        Iterator<Missile> it = missile.iterator();
-//        while(it.hasNext()){
-//            Missile m = it.next();
-//            if(/when do i remove missiles?){
-//                it.remove();
-//            }
-//        }
-
+       Iterator<Missile> it = missile.iterator();
+       while(it.hasNext()){
+            Missile m = it.next();
+           if(m.getY() > 700){
+               it.remove();
+          }
+        }
+       //collisions
+//       for(int i = 0; i < missile.size; i++){
+//           if(missile.get(i).collides()
+//       }
 
 
 
