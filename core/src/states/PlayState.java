@@ -201,7 +201,7 @@ public class PlayState extends State {
             //get the statemanager 
              StateManager gsm = getStateManager();
              //push on game screen
-             gsm.push(new OverState(gsm));
+             gsm.set(new OverState(gsm));
         }
 
         

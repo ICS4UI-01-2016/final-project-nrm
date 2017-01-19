@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.MyGdxGame;
 
 /**
  *
@@ -31,8 +32,8 @@ public class OverState extends State {
 
         batch.begin();
 
-        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
-
+        batch.draw(bg, 0, 0, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+        batch.end();
     }
 
     @Override
