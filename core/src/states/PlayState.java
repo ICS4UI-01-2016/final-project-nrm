@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Enemy;
+import com.mygdx.game.EnemyMissile;
 import com.mygdx.game.GreenEnemy;
 import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
@@ -26,6 +27,7 @@ public class PlayState extends State {
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
     private Array<GreenEnemy> green;
+    private Array<EnemyMissile> enemyMissile;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
@@ -166,8 +168,19 @@ public class PlayState extends State {
                 }
             }
         }
+        
+        Iterator<EnemyMissile> ix = enemyMissile.iterator();
+        while(ix.hasNext()){
+            EnemyMissile e = ix.next();
+            if(e.getY() > 10){
+                ix.remove();
+            }
+        } 
+        
         //collisions
 
+        
+        
 
 
 
