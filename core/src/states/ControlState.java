@@ -69,13 +69,13 @@ public class ControlState extends State {
         batch.begin();
         batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
         //draw the game "" on the menue screen 
-        font.draw(batch, "Controlls", getViewWidth() - 425, getViewHeight() - 100);
+        font.draw(batch, "Controls", getViewWidth() - 425, getViewHeight() - 100);
 
         //tell user all controls for the game 
         SmallFont.draw(batch, "Use left and right arrow keys to move", getViewWidth() - 550, getViewHeight() - 300);
         SmallFont.draw(batch, "Space to Shoot", getViewWidth() - 400, getViewHeight() - 400);
         //tell user to start 
-        font.draw(batch, "Click enter to start", getViewWidth() - 550, getViewHeight() - 550);
+        font.draw(batch, "Press space to main menu", getViewWidth() - 600, getViewHeight() - 550);
         
 
         batch.end();
@@ -88,11 +88,11 @@ public class ControlState extends State {
 
     @Override
     public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             //get the statemanager 
             StateManager gsm = getStateManager();
             //push on game screen
-            gsm.push(new PlayState(gsm));
+            gsm.set(new MenuState(gsm));
         }
     }
 

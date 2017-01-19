@@ -32,7 +32,10 @@ public class OverState extends State {
         batch.begin();
 
         batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
+        
+        
 
+        batch.end();
     }
 
     @Override
@@ -46,7 +49,7 @@ public class OverState extends State {
             //get the statemanager 
              StateManager gsm = getStateManager();
              
-             gsm.push(new MenuState(gsm));
+             gsm.set(new MenuState(gsm));
         }
     }
 

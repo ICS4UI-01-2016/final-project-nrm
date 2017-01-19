@@ -184,20 +184,10 @@ public class PlayState extends State {
 
         }
 
-
-
-
-
         for (int i = 0; i < missile.size; i++) {
             missile.get(i).update(deltaTime);
         }
-//        //create explosion when enemy has been hit
-//        for(int i = 0; i < enemy.size; i++){
-//            if(enemy.get(i).hasEnemyBeenHit()){
-//                
-//                explosion.add(new Explosion(enemy.get(i).getX(), enemy.get(i).getY()));
-//            }
-//        }
+
         //remove explosion after animation
         Iterator<Explosion> itex = explosion.iterator();
         while (itex.hasNext()) {
@@ -235,16 +225,6 @@ public class PlayState extends State {
              gsm.push(new OverState(gsm));
         }
 
-        
-
-
-        
-        
-
-
-
-
-
     }
     
     
@@ -271,8 +251,6 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
-
         player.dispose();
-
     }
 }

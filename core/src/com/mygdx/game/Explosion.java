@@ -27,8 +27,14 @@ public class Explosion {
         Texture explosion1 = new Texture("explosion1.png");
         Texture explosion2 = new Texture("explosion2.png");
         Texture explosion3 = new Texture("explosion3.png");
-        TextureRegion[] frames = {new TextureRegion(explosion1),new TextureRegion(explosion2), new TextureRegion(explosion3)};
-        explosion = new Animation(0.075f,frames);
+        Texture explosion4 = new Texture("explosion4.png");
+        Texture explosion5 = new Texture("explosion5.png");
+        Texture explosion6 = new Texture("explosion6.png");
+        Texture explosion7 = new Texture("explosion7.png");
+        Texture explosion8 = new Texture("explosion8.png");
+        
+        TextureRegion[] frames = {new TextureRegion(explosion1),new TextureRegion(explosion2), new TextureRegion(explosion3), new TextureRegion(explosion4),new TextureRegion(explosion5),new TextureRegion(explosion6),new TextureRegion(explosion7),new TextureRegion(explosion8)};
+        explosion = new Animation(0.035f,frames);
         
     }
     

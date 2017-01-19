@@ -82,8 +82,9 @@ public class MenuState extends State {
         font.draw(batch, ""+ highScore, getViewWidth()/2, getViewHeight()-100);
         //draw the game "name" on the menue screen 
         font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
+        font.draw(batch, "Press I for instructions", getViewWidth() - 575, getViewHeight() - 400);
         //tell user to "press enter to start the game.
-        font.draw(batch, "Press space to Continue ", getViewWidth() - 575, getViewHeight() - 500);
+        font.draw(batch, "Press space to play!", getViewWidth() - 575, getViewHeight() - 500);
         
 
         batch.end();
@@ -101,11 +102,17 @@ public class MenuState extends State {
 
     @Override
     public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             //get the statemanager 
             StateManager gsm = getStateManager();
             //push on game screen
             gsm.push(new ControlState(gsm));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            //get the statemanager 
+            StateManager gsm = getStateManager();
+            //push on game screen
+            gsm.push(new PlayState(gsm));
         }
 
     }
