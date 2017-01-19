@@ -17,7 +17,6 @@ public class Missile {
     private float missileX;
     private Texture missileTexture;
     private Rectangle bounds;
-    private boolean hasHit;
     
     private final float UPWARDS_VELOCITY = 150;
     
