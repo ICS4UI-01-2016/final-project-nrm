@@ -7,6 +7,7 @@ package states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -28,36 +29,32 @@ public class MenuState extends State {
     //the font
     public BitmapFont font;
     public BitmapFont SmallFont;
-    
-    
 
     public MenuState(StateManager sm) {
         super(sm);
         //add the backround texture image
         bg = new Texture("Galaga_Background.png");
         //create the font generator
-        FreeTypeFontGenerator fontGenerator = new
-        //grab the font from the fonts avalible in assets 
-        FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+        FreeTypeFontGenerator fontGenerator = new //grab the font from the fonts avalible in assets 
+                FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
         //create the new font type 
-        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new
-        //actually generate the font         
-        FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new //actually generate the font         
+                FreeTypeFontGenerator.FreeTypeFontParameter();
         //chaze the size of th font 
         fontParameter.size = 44;
-        
-        font= fontGenerator.generateFont(fontParameter);
-      
+
+        font = fontGenerator.generateFont(fontParameter);
+
         //set camera view
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
-        
+
         //THE SECOND FONT 
         FreeTypeFontGenerator fontGenerator2 = new //grab the font from the fonts avalible in assets 
-        FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+                FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
         //create the new font type 
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter2 = new //FreeTypeFontGenerator.FreeTypeFontParameter fontParamter2=new        
-        //actually generate the font         
-        FreeTypeFontGenerator.FreeTypeFontParameter();
+                //actually generate the font         
+                FreeTypeFontGenerator.FreeTypeFontParameter();
         //chaze the size of th font 
         fontParameter.size = 28;
 
@@ -65,62 +62,52 @@ public class MenuState extends State {
         //set camera view
         SmallFont.setColor(com.badlogic.gdx.graphics.Color.GREEN);
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         
+        
+         Preferences pref=Gdx.app.getPreferences("hightScore");
+        //finf int hihgscore if not set value to 0
+        highScore=pref.getInteger("highScore",0);
+
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        
+
         batch.setProjectionMatrix(getCombinedCamera());
-        
+
         batch.begin();
+
+        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
+        font.draw(batch, ""+ highScore, getViewWidth()/2, getViewHeight()-100);
+        //draw the game "name" on the menue screen 
+        font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
+        //tell user to "press enter to start the game.
+        font.draw(batch, "Press space to Continue ", getViewWidth() - 575, getViewHeight() - 500);
         
-       batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
-       //draw the game "name" on the menue screen 
-       font.draw(batch, "GALAGA", getViewWidth()-400, getViewHeight()-350);
-       //tell user to "press enter to start the game.
-       font.draw(batch, "Press space to Continue ", getViewWidth()-575, getViewHeight()-500);
-     
-       
+
         batch.end();
     }
 
-    
-    public void upDateScore(){
-        
+    public void updateScore() {
+        Preferences pref = Gdx.app.getPreferences("hightScore");
+        highScore = pref.getInteger("highScore", 0);
     }
-    
-    
+
     @Override
     public void update(float deltaTime) {
-       
+
     }
 
     @Override
     public void handleInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             //get the statemanager 
-             StateManager gsm = getStateManager();
-             //push on game screen
-             gsm.push(new ControlState(gsm));
+            StateManager gsm = getStateManager();
+            //push on game screen
+            gsm.push(new ControlState(gsm));
         }
 
-       
-        
-        
     }
 
     /**
@@ -133,7 +120,7 @@ public class MenuState extends State {
     }
 
     private void setCameraPosition(float f, float f0) {
-        
+
     }
 
 }
