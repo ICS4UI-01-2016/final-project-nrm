@@ -18,8 +18,11 @@ public class Player {
     private float velocityX;
     private Texture playerPic;
     private Rectangle bounds;
+    private float lastMissileFired = 0;
+    private float lives;
     
     public Player(int x, int y, int width, int height){
+        lives = 3;
         playerX = x;
         playerY = y;
         velocityX = 0;
@@ -56,6 +59,9 @@ public class Player {
         playerX += velocityX*deltaTime;
         //update the bounds to playerX and playerY
         bounds.setPosition(playerX, playerY);
+        if(lastMissileFired > 0){
+            lastMissileFired = lastMissileFired - deltaTime;
+        }
     }
     
     public void render(SpriteBatch batch){
@@ -64,6 +70,27 @@ public class Player {
     
     public void dispose(){
         playerPic.dispose();
+    }
+    
+    
+    
+    
+    public boolean fire(float time){
+        if(lastMissileFired <= 0){
+            lastMissileFired = 0.35f;
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    public void playerHit(){
+        lives -= 1;
+    }
+    
+    public float getLives(){
+        return lives;
     }
     
     

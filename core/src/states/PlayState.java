@@ -6,10 +6,18 @@ package states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Enemy;
+
+import com.mygdx.game.EnemyMissile;
+
+import com.mygdx.game.Explosion;
+
 import com.mygdx.game.GreenEnemy;
 import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
@@ -26,37 +34,37 @@ public class PlayState extends State {
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
     private Array<GreenEnemy> green;
+    private Array<EnemyMissile> enemyMissile;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
+    private Texture getHit;
     private Array<Missile> missile;
+    private Array<Explosion> explosion;
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
+    private float enemytime = 0;
+    private int score=0;
+    public BitmapFont font;
+    private Texture lives;
 
     public PlayState(StateManager sm) {
         super(sm);
         player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
         missile = new Array<Missile>();
-        
+        explosion = new Array<Explosion>();
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-
         bg = new Texture("Galaga_Background.png");
-
-
+        lives = new Texture("Galaga_Fighter.png");
         batch = new SpriteBatch();
-
-
-
-
         enemy = new Array<Enemy>();
-
         int count = 0;
         int y = 360;
-        for (int i = 0; i < 8; i++) {
-            enemy.add(new Enemy(150 + (count * 30), y));
-//            y = 390;
-//            enemy.add(new Enemy(150+(count * 30), y));
-//            y= 360;
+        for (int i = 0; i < 10; i++) {
+            enemy.add(new Enemy(50 + (count * 30), y));
+            y = 390;
+            enemy.add(new Enemy(50 + (count * 30), y));
+            y = 360;
             count++;
         }
 
@@ -70,27 +78,23 @@ public class PlayState extends State {
 //            y1 = 450;
 //            count1++;
 //        }
+        //create the font generator
+        FreeTypeFontGenerator fontGenerator = new
+        //grab the font from the fonts avalible in assets 
+        FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+        //create the new font type 
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new
+        //actually generate the font         
+        FreeTypeFontGenerator.FreeTypeFontParameter();
+        //chaze the size of th font 
+        fontParameter.size = 18;
+        
+        font= fontGenerator.generateFont(fontParameter);
+      
+        //set camera view
+        font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
+     score=0;
 
-//        enemy = new Enemy[10];
-//        int count = 0;
-//        for (int i = 0; i < enemy.length; i++) {
-//            enemy[i] = new Enemy(150 + (count * 30), 360);
-//            count++;
-//        }
-//
-//        redEnemy = new RedEnemy[8];
-//        int c = 0;
-//        for (int i = 0; i < redEnemy.length; i++) {
-//            redEnemy[i] = new RedEnemy(180 + (c * 30), 425);
-//            c++;
-//        }
-//
-//        green = new GreenEnemy[4];
-//        int x = 0;
-//        for (int i = 0; i < green.length; i++) {
-//            green[i] = new GreenEnemy(238 + (x * 30), 490);
-//            x++;
-//        }
 
     }
 
@@ -100,34 +104,17 @@ public class PlayState extends State {
         batch.setProjectionMatrix(getCombinedCamera());
 
         batch.begin();
+        
 
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-
+        font.draw(batch," score: " + score, getViewWidth()-150,getViewHeight()-50);
         player.render(batch);
 
-//        for (int i = 0; i < enemy.length; i++) {
-//            enemy[i].render(batch);
-//        }
-//
-//        for (int i = 0; i < redEnemy.length; i++) {
-//            redEnemy[i].render(batch);
-//        }
-//        
-//
-//        for (int i = 0; i < enemy.length; i++) {
-//            enemy[i].render(batch);
-//        }
-//        
-//
-//
-        for (int i = 0; i < missile.size; i++) {
+       
+            for (int i = 0; i < missile.size; i++) {
             missile.get(i).render(batch);
         }
-//        
-//
-//        for (int i = 0; i < green.length; i++) {
-//            green[i].render(batch);
-//        }
+
 
         for (int i = 0; i < enemy.size; i++) {
             enemy.get(i).render(batch);
@@ -135,20 +122,90 @@ public class PlayState extends State {
 
 //        for(int i = 0; i < 8; i++){
 //            redEnemy.get(i).render(batch);
-//        }
+//      }
 
+        //draw explosion
+        for (int i = 0; i < explosion.size; i++) {
+            explosion.get(i).render(batch);
+        }
+        
+        if(player.getLives() == 3){
+            batch.draw(lives, 5, 5);
+            batch.draw(lives, 30, 5);
+        }
+        
+        if(player.getLives() == 2){
+            batch.draw(lives, 5, 5);
+        }
+        
 
-
-batch.end();
+        batch.end();
     }
 
+    
+    
+    
+    
+     
+    
+    
+    
     @Override
     public void update(float deltaTime) {
         player.update(deltaTime);
 
+        for (int i = 0; i < enemy.size; i++) {
+            enemy.get(i).update(deltaTime);
+        }
+
+
+
+        enemytime += deltaTime;
+        if (enemytime > 8) {
+            enemytime = enemytime - 8;
+        }
+
+        if (enemytime <= 4) {
+
+            for (int i = 0; i < enemy.size; i++) {
+                enemy.get(i).moveRight();
+
+            }
+        }
+
+
+        if (enemytime > 4) {
+            for (int i = 0; i < enemy.size; i++) {
+
+                enemy.get(i).moveLeft();
+
+
+            }
+
+        }
+
+
+
+
 
         for (int i = 0; i < missile.size; i++) {
             missile.get(i).update(deltaTime);
+        }
+//        //create explosion when enemy has been hit
+//        for(int i = 0; i < enemy.size; i++){
+//            if(enemy.get(i).hasEnemyBeenHit()){
+//                
+//                explosion.add(new Explosion(enemy.get(i).getX(), enemy.get(i).getY()));
+//            }
+//        }
+        //remove explosion after animation
+        Iterator<Explosion> itex = explosion.iterator();
+        while (itex.hasNext()) {
+            Explosion ex = itex.next();
+            ex.update(deltaTime);
+            if (ex.isFinished()) {
+                itex.remove();
+            }
         }
 
         Iterator<Missile> it = missile.iterator();
@@ -156,24 +213,41 @@ batch.end();
             Missile m = it.next();
             if (m.getY() > 700) {
                 it.remove();
-            }else{
+            } else {
                 Iterator<Enemy> ite = enemy.iterator();
                 while (ite.hasNext()) {
                     Enemy e = ite.next();
-                    if (m.collides(e)){
+                    if (m.collides(e)) {
+                        explosion.add(new Explosion(e.getX(), e.getY()));
                         it.remove();
                         ite.remove();
+                        score=score+50;
                         break;
                     }
                 }
             }
         }
-        //collisions
+
+        if(player.getLives() == 0){
+            //get the statemanager 
+             StateManager gsm = getStateManager();
+             //push on game screen
+             gsm.push(new OverState(gsm));
+        }
+
+        
+
+
+        
         
 
 
 
+
+
     }
+    
+    
 
     @Override
     public void handleInput() {
@@ -185,16 +259,13 @@ batch.end();
             player.zeroVelocity();
         }
 
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.fire(System.currentTimeMillis())) {
             missile.add(new Missile(player.getX() + PLAYER_WIDTH / 2 - 3, player.getY() + PLAYER_HEIGHT));
-
         }
 
-
-
-
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            player.playerHit();
+        }
 
     }
 
