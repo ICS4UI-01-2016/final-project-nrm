@@ -35,6 +35,7 @@ public class PlayState extends State {
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
     private float enemytime = 0;
+    private Texture lives;
 
     public PlayState(StateManager sm) {
         super(sm);
@@ -43,6 +44,7 @@ public class PlayState extends State {
         explosion = new Array<Explosion>();
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         bg = new Texture("Galaga_Background.png");
+        lives = new Texture("Galaga_Fighter.png");
         batch = new SpriteBatch();
         enemy = new Array<Enemy>();
         int count = 0;
@@ -93,11 +95,22 @@ public class PlayState extends State {
 
 //        for(int i = 0; i < 8; i++){
 //            redEnemy.get(i).render(batch);
-//        }
+//      }
+
         //draw explosion
-        for(int i = 0; i < explosion.size; i++){
+        for (int i = 0; i < explosion.size; i++) {
             explosion.get(i).render(batch);
         }
+        
+        if(player.getLives() == 3){
+            batch.draw(lives, 5, 5);
+            batch.draw(lives, 30, 5);
+        }
+        
+        if(player.getLives() == 2){
+            batch.draw(lives, 5, 5);
+        }
+        
 
         batch.end();
     }
@@ -113,7 +126,7 @@ public class PlayState extends State {
 
 
         enemytime += deltaTime;
-        if(enemytime > 8){
+        if (enemytime > 8) {
             enemytime = enemytime - 8;
         }
 
@@ -143,21 +156,23 @@ public class PlayState extends State {
         for (int i = 0; i < missile.size; i++) {
             missile.get(i).update(deltaTime);
         }
-        //create explosion when enemy has been hit
-        for(int i = 0; i < enemy.size; i++){
-            if(enemy.get(i).hasEnemyBeenHit()){
-                explosion.add(new Explosion(enemy.get(i).getX(), enemy.get(i).getY()));
-            }
-        }
+//        //create explosion when enemy has been hit
+//        for(int i = 0; i < enemy.size; i++){
+//            if(enemy.get(i).hasEnemyBeenHit()){
+//                
+//                explosion.add(new Explosion(enemy.get(i).getX(), enemy.get(i).getY()));
+//            }
+//        }
         //remove explosion after animation
         Iterator<Explosion> itex = explosion.iterator();
         while (itex.hasNext()) {
             Explosion ex = itex.next();
-            if(ex.isFinished()){
+            ex.update(deltaTime);
+            if (ex.isFinished()) {
                 itex.remove();
             }
         }
-        
+
         Iterator<Missile> it = missile.iterator();
         while (it.hasNext()) {
             Missile m = it.next();
@@ -168,7 +183,7 @@ public class PlayState extends State {
                 while (ite.hasNext()) {
                     Enemy e = ite.next();
                     if (m.collides(e)) {
-                        e.enemyHit();
+                        explosion.add(new Explosion(e.getX(), e.getY()));
                         it.remove();
                         ite.remove();
                         break;
@@ -176,7 +191,15 @@ public class PlayState extends State {
                 }
             }
         }
+        if(player.getLives() == 0){
+            //get the statemanager 
+             StateManager gsm = getStateManager();
+             //push on game screen
+             gsm.push(new OverState(gsm));
+        }
     }
+    
+    
 
     @Override
     public void handleInput() {
@@ -188,13 +211,12 @@ public class PlayState extends State {
             player.zeroVelocity();
         }
 
-
-        
-        
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.fire(System.currentTimeMillis())) {
-
             missile.add(new Missile(player.getX() + PLAYER_WIDTH / 2 - 3, player.getY() + PLAYER_HEIGHT));
+        }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            player.playerHit();
         }
 
     }
