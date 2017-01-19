@@ -10,7 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Enemy;
+
+import com.mygdx.game.EnemyMissile;
+
 import com.mygdx.game.Explosion;
+
 import com.mygdx.game.GreenEnemy;
 import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
@@ -27,6 +31,7 @@ public class PlayState extends State {
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
     private Array<GreenEnemy> green;
+    private Array<EnemyMissile> enemyMissile;
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
@@ -191,12 +196,24 @@ public class PlayState extends State {
                 }
             }
         }
+
         if(player.getLives() == 0){
             //get the statemanager 
              StateManager gsm = getStateManager();
              //push on game screen
              gsm.push(new OverState(gsm));
         }
+
+        
+
+
+        
+        
+
+
+
+
+
     }
     
     
