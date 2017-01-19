@@ -77,7 +77,6 @@ public class Enemy {
     
     public void enemyHit(){
         hasEnemyBeenHit = true;
-        System.out.println("hit");
     }
     
     public boolean hasEnemyBeenHit(){

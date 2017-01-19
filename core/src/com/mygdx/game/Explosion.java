@@ -28,7 +28,7 @@ public class Explosion {
         Texture explosion2 = new Texture("explosion2.png");
         Texture explosion3 = new Texture("explosion3.png");
         TextureRegion[] frames = {new TextureRegion(explosion1),new TextureRegion(explosion2), new TextureRegion(explosion3)};
-        explosion = new Animation(0.5f,frames);
+        explosion = new Animation(0.075f,frames);
         
     }
     

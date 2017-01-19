@@ -19,8 +19,10 @@ public class Player {
     private Texture playerPic;
     private Rectangle bounds;
     private float lastMissileFired = 0;
+    private float lives;
     
     public Player(int x, int y, int width, int height){
+        lives = 3;
         playerX = x;
         playerY = y;
         velocityX = 0;
@@ -74,15 +76,21 @@ public class Player {
     
     
     public boolean fire(float time){
-        
         if(lastMissileFired <= 0){
             lastMissileFired = 0.35f;
             return true;
         } else {
-            System.out.println("false");
             return false;
         }
         
+    }
+    
+    public void playerHit(){
+        lives -= 1;
+    }
+    
+    public float getLives(){
+        return lives;
     }
     
     
