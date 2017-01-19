@@ -34,7 +34,7 @@ public class Enemy {
     
     public void render(SpriteBatch batch) {
 //        
-        batch.draw(enemy, enemyX, enemyY + 30);
+        batch.draw(enemy, enemyX, enemyY);
     }
     
     public void update(float deltaTime){
@@ -51,7 +51,9 @@ public class Enemy {
     }
     
     public Rectangle getBounds(){
-        return bounds2;
+        return bounds;
     }
+    
+    
     
 }
