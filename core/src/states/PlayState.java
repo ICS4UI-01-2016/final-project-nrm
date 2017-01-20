@@ -236,10 +236,19 @@ public class PlayState extends State {
             enemy.get(count).setY(MyGdxGame.HEIGHT);
             top = true;
         }
-        if (enemy.get(count).getY() <= inty && top == true) {
+        if (enemy.get(count).getY() <= enemy.get(count).getYPosition() && top == true) {
             enemy.get(count).enemyStopY();
             count += count;
         }
+    
+    Preferences pref=Gdx.app.getPreferences("highScore");
+    int highScore=pref.getInteger("highScore",0);
+    if(score>highScore){
+        pref.putInteger("hightScore", score);
+        pref.flush();
+    }
+    
+    
     }
 
     @Override

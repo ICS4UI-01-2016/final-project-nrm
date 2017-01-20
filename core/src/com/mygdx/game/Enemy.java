@@ -21,11 +21,15 @@ public class Enemy {
     private float enemyY;
     private float velocityX;
     private float velocityY;
+    private boolean moving;
+    private float yPosition;
     
     public Enemy(float x, float y){
         enemyX = x;
         enemyY = y;
         enemy = new Texture("Galaga_Enemy1.png");
+        yPosition = y;
+        moving = false;
 
         hasEnemyBeenHit = false;
 
@@ -85,14 +89,20 @@ public class Enemy {
     
     public void enemyAttack(){
         velocityY = -90;
+        moving = true;
     }
     
     public void enemyStopY(){
         velocityY = 0;
+        moving = false;
     }
     
     public void setY(float y){
         enemyY = y;
+    }
+    
+    public float getYPosition(){
+        return yPosition;
     }
     
     
