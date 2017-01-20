@@ -17,15 +17,19 @@ public class Enemy {
     private Texture enemy;
     private boolean hasEnemyBeenHit;
     private Rectangle bounds;
-    private int enemyX;
-    private int enemyY;
+    private float enemyX;
+    private float enemyY;
     private float velocityX;
     private float velocityY;
+    private boolean moving;
+    private float yPosition;
     
-    public Enemy(int x, int y){
+    public Enemy(float x, float y){
         enemyX = x;
         enemyY = y;
         enemy = new Texture("Galaga_Enemy1.png");
+        yPosition = y;
+        moving = false;
 
         hasEnemyBeenHit = false;
 
@@ -39,7 +43,7 @@ public class Enemy {
 
          
     public void moveLeft(){
-        velocityX = -45;
+        velocityX = -90;
     }
     
     public void moveRight(){
@@ -63,11 +67,11 @@ public class Enemy {
         
     }
     
-    public int getX(){
+    public float getX(){
         return enemyX;
     }
     
-    public int getY(){
+    public float getY(){
         return enemyY;
     }
     
@@ -84,8 +88,23 @@ public class Enemy {
     }
     
     public void enemyAttack(){
-        enemyY = -90;
+        velocityY = -90;
+        moving = true;
     }
+    
+    public void enemyStopY(){
+        velocityY = 0;
+        moving = false;
+    }
+    
+    public void setY(float y){
+        enemyY = y;
+    }
+    
+    public float getYPosition(){
+        return yPosition;
+    }
+    
     
     
     

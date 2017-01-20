@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.MyGdxGame;
 
 /**
  *
@@ -15,12 +16,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class OverState extends State {
 
-    private Texture bg;
+    
+    private Texture gameOver;
 
     public OverState(StateManager sm) {
         super(sm);
 
-        bg = new Texture("Galaga_Background.png");
+        
+        gameOver = new Texture("game-over.png");
+        
+        setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
 
     }
 
@@ -31,9 +36,8 @@ public class OverState extends State {
 
         batch.begin();
 
-        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
-        
-        
+
+        batch.draw(gameOver, 0, 0, getViewWidth(), getViewHeight());
 
         batch.end();
     }
@@ -55,6 +59,6 @@ public class OverState extends State {
 
     @Override
     public void dispose() {
-        bg.dispose();
+        gameOver.dispose();
     }
 }

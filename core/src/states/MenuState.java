@@ -29,11 +29,13 @@ public class MenuState extends State {
     //the font
     public BitmapFont font;
     public BitmapFont SmallFont;
+    private Texture galaga;
 
     public MenuState(StateManager sm) {
         super(sm);
         //add the backround texture image
         bg = new Texture("Galaga_Background.png");
+        galaga = new Texture("galaga.png");
         //create the font generator
         FreeTypeFontGenerator fontGenerator = new //grab the font from the fonts avalible in assets 
                 FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
@@ -81,7 +83,9 @@ public class MenuState extends State {
         batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
         font.draw(batch, ""+ highScore, getViewWidth()/2, getViewHeight()-100);
         //draw the game "name" on the menue screen 
-        font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
+//        font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
+        batch.draw(galaga, 150, 300, getViewWidth()-300, getViewHeight()-450);
+        
         font.draw(batch, "Press I for instructions", getViewWidth() - 575, getViewHeight() - 400);
         //tell user to "press enter to start the game.
         font.draw(batch, "Press space to play!", getViewWidth() - 575, getViewHeight() - 500);
