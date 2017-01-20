@@ -19,7 +19,8 @@ public class Enemy {
     private Rectangle bounds;
     private int enemyX;
     private int enemyY;
-    private float velocity;
+    private float velocityX;
+    private float velocityY;
     
     public Enemy(int x, int y){
         enemyX = x;
@@ -28,8 +29,8 @@ public class Enemy {
 
         hasEnemyBeenHit = false;
 
-        velocity = 0;
-        
+        velocityX = 0;
+        velocityY = 0;
        
 
         bounds = new Rectangle(enemyX, enemyY, enemy.getWidth(), enemy.getHeight());
@@ -38,15 +39,14 @@ public class Enemy {
 
          
     public void moveLeft(){
-        velocity = -45;
+        velocityX = -45;
     }
     
     public void moveRight(){
-        velocity = 90;
+        velocityX = 90;
     }
     
     public void render(SpriteBatch batch) {
-
         batch.draw(enemy, enemyX, enemyY);
     }
     
@@ -55,7 +55,8 @@ public class Enemy {
         
         
         
-        enemyX += velocity*deltaTime;
+        enemyX += velocityX*deltaTime;
+        enemyY += velocityY*deltaTime;
         
 
         bounds.setPosition(enemyX, enemyY);
@@ -72,7 +73,6 @@ public class Enemy {
     
     public Rectangle getBounds(){
         return bounds;
-
     }
     
     public void enemyHit(){
@@ -81,7 +81,12 @@ public class Enemy {
     
     public boolean hasEnemyBeenHit(){
         return hasEnemyBeenHit;
-
     }
+    
+    public void enemyAttack(){
+        enemyY = -90;
+    }
+    
+    
     
 }

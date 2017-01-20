@@ -16,12 +16,16 @@ import com.mygdx.game.MyGdxGame;
  */
 public class OverState extends State {
 
-    private Texture bg;
+    
+    private Texture gameOver;
 
     public OverState(StateManager sm) {
         super(sm);
 
-        bg = new Texture("Galaga_Background.png");
+        
+        gameOver = new Texture("game-over.png");
+        
+        setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
 
     }
 
@@ -32,7 +36,9 @@ public class OverState extends State {
 
         batch.begin();
 
-        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
+
+        batch.draw(gameOver, 0, 0, getViewWidth(), getViewHeight());
+
         batch.end();
     }
 
@@ -47,12 +53,12 @@ public class OverState extends State {
             //get the statemanager 
              StateManager gsm = getStateManager();
              
-             gsm.push(new MenuState(gsm));
+             gsm.set(new MenuState(gsm));
         }
     }
 
     @Override
     public void dispose() {
-        bg.dispose();
+        gameOver.dispose();
     }
 }
