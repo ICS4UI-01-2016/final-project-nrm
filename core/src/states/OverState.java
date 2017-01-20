@@ -32,7 +32,7 @@ public class OverState extends State {
 
         batch.begin();
 
-        batch.draw(bg, 0, 0, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+        batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
         batch.end();
     }
 
