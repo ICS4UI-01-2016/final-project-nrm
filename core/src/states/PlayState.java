@@ -44,7 +44,7 @@ public class PlayState extends State {
     public final int PLAYER_WIDTH = 28;
     public final int PLAYER_HEIGHT = 30;
     private float enemytime = 0;
-    private int score=0;
+    private int score = 0;
     public BitmapFont font;
     private Texture lives;
 
@@ -53,6 +53,7 @@ public class PlayState extends State {
         player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
         missile = new Array<Missile>();
         explosion = new Array<Explosion>();
+        enemyMissile = new Array<EnemyMissile>();
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         bg = new Texture("Galaga_Background.png");
         lives = new Texture("Galaga_Fighter.png");
@@ -79,21 +80,19 @@ public class PlayState extends State {
 //            count1++;
 //        }
         //create the font generator
-        FreeTypeFontGenerator fontGenerator = new
-        //grab the font from the fonts avalible in assets 
-        FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+        FreeTypeFontGenerator fontGenerator = new //grab the font from the fonts avalible in assets 
+                FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
         //create the new font type 
-        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new
-        //actually generate the font         
-        FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new //actually generate the font         
+                FreeTypeFontGenerator.FreeTypeFontParameter();
         //chaze the size of th font 
         fontParameter.size = 18;
-        
-        font= fontGenerator.generateFont(fontParameter);
-      
+
+        font = fontGenerator.generateFont(fontParameter);
+
         //set camera view
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
-     score=0;
+        score = 0;
 
 
     }
@@ -104,15 +103,19 @@ public class PlayState extends State {
         batch.setProjectionMatrix(getCombinedCamera());
 
         batch.begin();
-        
+
 
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-        font.draw(batch," score: " + score, getViewWidth()-150,getViewHeight()-50);
+        font.draw(batch, " score: " + score, getViewWidth() - 150, getViewHeight() - 50);
         player.render(batch);
 
-       
-            for (int i = 0; i < missile.size; i++) {
+
+        for (int i = 0; i < missile.size; i++) {
             missile.get(i).render(batch);
+        }
+
+        for (int i = 0; i < enemyMissile.size; i++) {
+            enemyMissile.get(i).render(batch);
         }
 
 
@@ -128,28 +131,20 @@ public class PlayState extends State {
         for (int i = 0; i < explosion.size; i++) {
             explosion.get(i).render(batch);
         }
-        
-        if(player.getLives() == 3){
+
+        if (player.getLives() == 3) {
             batch.draw(lives, 5, 5);
-            batch.draw(lives, 30, 5);
+            batch.draw(lives, 40, 5);
         }
-        
-        if(player.getLives() == 2){
+
+        if (player.getLives() == 2) {
             batch.draw(lives, 5, 5);
         }
-        
+
 
         batch.end();
     }
 
-    
-    
-    
-    
-     
-    
-    
-    
     @Override
     public void update(float deltaTime) {
         player.update(deltaTime);
@@ -188,6 +183,10 @@ public class PlayState extends State {
             missile.get(i).update(deltaTime);
         }
 
+        for (int i = 0; i < enemyMissile.size; i++) {
+            enemyMissile.get(i).update(deltaTime);
+        }
+
         //remove explosion after animation
         Iterator<Explosion> itex = explosion.iterator();
         while (itex.hasNext()) {
@@ -211,23 +210,37 @@ public class PlayState extends State {
                         explosion.add(new Explosion(e.getX(), e.getY()));
                         it.remove();
                         ite.remove();
-                        score=score+50;
+                        score = score + 50;
                         break;
                     }
                 }
             }
         }
 
-        if(player.getLives() == 0){
+        if (player.getLives() == 0) {
             //get the statemanager 
-             StateManager gsm = getStateManager();
-             //push on game screen
-             gsm.set(new OverState(gsm));
+            StateManager gsm = getStateManager();
+            //push on game screen
+            gsm.set(new OverState(gsm));
         }
 
+        int count = 0;
+        float inty = enemy.get(count).getY();
+        enemy.get(count).enemyAttack();
+        boolean top = false;
+
+        if (enemy.get(count).getY() < 175 && enemy.get(count).getY() > 173) {
+            enemyMissile.add(new EnemyMissile(enemy.get(count).getX(), enemy.get(count).getY()));
+        }
+        if (enemy.get(count).getY() < 0) {
+            enemy.get(count).setY(MyGdxGame.HEIGHT);
+            top = true;
+        }
+        if (enemy.get(count).getY() <= inty && top == true) {
+            enemy.get(count).enemyStopY();
+            count += count;
+        }
     }
-    
-    
 
     @Override
     public void handleInput() {

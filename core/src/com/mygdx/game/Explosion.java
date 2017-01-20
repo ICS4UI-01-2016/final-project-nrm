@@ -20,7 +20,7 @@ public class Explosion {
     private float explosionY;
     private float time = 0;
     
-    public Explosion(int x, int y){
+    public Explosion(float x, float y){
         explosionX = x;
         explosionY = y;
      

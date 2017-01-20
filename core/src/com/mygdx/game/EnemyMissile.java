@@ -17,7 +17,6 @@ public class EnemyMissile {
     private float enemyMissileX;
     private Texture enemyMissileTexture;
     private Rectangle bounds;
-    private boolean hasHit;
     
     private final float DOWNWARDS_VELOCITY = -150;
     
