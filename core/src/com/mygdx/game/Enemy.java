@@ -24,6 +24,7 @@ public class Enemy {
     private boolean moving;
     private boolean fired;
     private boolean leftScreen;
+    private boolean enemyStop;
 
     public Enemy(float x, float y) {
         enemyX = x;
@@ -35,6 +36,7 @@ public class Enemy {
         bounds = new Rectangle(enemyX, enemyY, enemy.getWidth(), enemy.getHeight());
         moving = false;
         fired = false;
+        enemyStop = false;
     }
 
     public void update(float deltaTime) {
@@ -105,11 +107,20 @@ public class Enemy {
     }
     
     public void leaveScreen(){
-        leftScreen = true;
+        leftScreen = !leftScreen;
+        System.out.println(leftScreen);
     }
     
     public boolean hasEnemyLeftScreen(){
         return leftScreen;
+    }
+    
+    public void timeToStop(){
+        enemyStop = true; 
+    }
+    
+    public boolean stopEnemy(){
+        return enemyStop;
     }
 
 }

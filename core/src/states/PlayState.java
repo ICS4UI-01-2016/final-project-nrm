@@ -48,6 +48,7 @@ public class PlayState extends State {
     public BitmapFont font;
     private Texture lives;
     private boolean areEnemiesAttacking;
+    private int enemyNumber;
 
     public PlayState(StateManager sm) {
         super(sm);
@@ -64,9 +65,9 @@ public class PlayState extends State {
         int y = 360;
         areEnemiesAttacking = false;
         for (int i = 0; i < 10; i++) {
-            enemy.add(new Enemy(50 + (count * 30), y));
+            enemy.add(new Enemy(20 + (count * 30), y));
             y = 390;
-            enemy.add(new Enemy(50 + (count * 30), y));
+            enemy.add(new Enemy(20 + (count * 30), y));
             y = 360;
             count++;
         }
@@ -150,11 +151,11 @@ public class PlayState extends State {
         }
 
         enemytime += deltaTime;
-        if (enemytime > 8) {
-            enemytime = enemytime - 8;
+        if (enemytime > 6) {
+            enemytime = enemytime - 6;
         }
 
-        if (enemytime <= 4) {
+        if (enemytime <= 3) {
 
             for (int i = 0; i < enemy.size; i++) {
                 enemy.get(i).moveRight();
@@ -162,7 +163,7 @@ public class PlayState extends State {
             }
         }
 
-        if (enemytime > 4) {
+        if (enemytime > 3) {
             for (int i = 0; i < enemy.size; i++) {
 
                 enemy.get(i).moveLeft();
@@ -208,52 +209,61 @@ public class PlayState extends State {
                 }
             }
         }
-        
-        if(player.getLives()==0){
+
+        if (player.getLives() == 0) {
             //get the statemanager 
             StateManager gsm = getStateManager();
             //push on game screen
             gsm.set(new OverState(gsm));
         }
-        
-        for(int i = 0; i < enemy.size; i++){
-            if(enemy.get(i).getY() != enemy.get(i).getOriginalY()){
+
+        for (int i = 0; i < enemy.size; i++) {
+            if (enemy.get(i).getY() != enemy.get(i).getOriginalY()) {
                 enemy.get(i).setMoving();
             }
         }
-        for(int i = 0; i < enemy.size; i++){
-            if(enemy.get(i).getY() < 0){
+        for (int i = 0; i < enemy.size; i++) {
+            if (enemy.get(i).getY() < 0) {
                 enemy.get(i).leaveScreen();
             }
         }
+        
+        
         //are enemies attacking?
-        if(!areEnemiesAttacking){
+        if (!areEnemiesAttacking) {
             areEnemiesAttacking = !areEnemiesAttacking;
-            int enemyNumber = (int )(Math.random()*enemy.size);
+            enemyNumber = (int) (Math.random() * enemy.size);
             enemyAttack(enemy.get(enemyNumber));
         }
-       
+        if(areEnemiesAttacking){
+            System.out.println(enemyNumber);
+            enemyAttack(enemy.get(enemyNumber));
+            
+        }
         
+
+
     }
-    
-    public void enemyAttack(Enemy e){
+
+    public void enemyAttack(Enemy e) {
         e.enemyAttack();
-        if(e.getY() < 200 && !e.hasEnemyFired()){
+        if (e.getY() < 200 && !e.hasEnemyFired()) {
             enemyMissile.add(new EnemyMissile(e.getX(), e.getY()));
+            e.fire();
         }
-        if(e.hasEnemyLeftScreen()){
-            System.out.println("top");
+        if (e.hasEnemyLeftScreen()) {
             e.setY(MyGdxGame.HEIGHT);
+            e.leaveScreen();
+            e.timeToStop();
+            
         }
-        if(e.getY() < e.getOriginalY()){
+        if (e.getY() < e.getOriginalY() && e.stopEnemy()) {
             e.enemyStopY();
             e.setY(e.getOriginalY());
+            System.out.println("stop");
+            areEnemiesAttacking = false;
         }
     }
-    
-    
-    
-    
 
     @Override
     public void handleInput() {
@@ -272,13 +282,13 @@ public class PlayState extends State {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             player.playerHit();
         }
-        
+
     }
 
     @Override
     public void dispose() {
         player.dispose();
-        for(int i = 0; i < enemy.size; i++){
+        for (int i = 0; i < enemy.size; i++) {
             enemy.get(i).dispose();
         }
     }
