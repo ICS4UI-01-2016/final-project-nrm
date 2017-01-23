@@ -13,99 +13,103 @@ import com.badlogic.gdx.math.Rectangle;
  * @author voigr4865
  */
 public class Enemy {
-    
+
     private Texture enemy;
-    private boolean hasEnemyBeenHit;
     private Rectangle bounds;
     private float enemyX;
     private float enemyY;
     private float velocityX;
     private float velocityY;
+    private float originalY;
     private boolean moving;
-    private float yPosition;
-    
-    public Enemy(float x, float y){
+    private boolean fired;
+    private boolean leftScreen;
+
+    public Enemy(float x, float y) {
         enemyX = x;
         enemyY = y;
+        originalY = y;
         enemy = new Texture("Galaga_Enemy1.png");
-        yPosition = y;
-        moving = false;
-
-        hasEnemyBeenHit = false;
-
         velocityX = 0;
         velocityY = 0;
-       
-
         bounds = new Rectangle(enemyX, enemyY, enemy.getWidth(), enemy.getHeight());
+        moving = false;
+        fired = false;
     }
-    
 
-         
-    public void moveLeft(){
-        velocityX = -90;
+    public void update(float deltaTime) {
+        enemyX += velocityX * deltaTime;
+        enemyY += velocityY * deltaTime;
+        bounds.setPosition(enemyX, enemyY);
     }
-    
-    public void moveRight(){
-        velocityX = 90;
-    }
-    
+
     public void render(SpriteBatch batch) {
         batch.draw(enemy, enemyX, enemyY);
     }
-    
-    public void update(float deltaTime){
 
-        
-        
-        
-        enemyX += velocityX*deltaTime;
-        enemyY += velocityY*deltaTime;
-        
-
-        bounds.setPosition(enemyX, enemyY);
-        
+    public void dispose(){
+        enemy.dispose();
     }
     
-    public float getX(){
+    public void moveLeft() {
+        velocityX = -90;
+    }
+
+    public void moveRight() {
+        velocityX = 90;
+    }
+
+    public float getX() {
         return enemyX;
     }
-    
-    public float getY(){
+
+    public float getY() {
         return enemyY;
     }
-    
-    public Rectangle getBounds(){
+
+    public Rectangle getBounds() {
         return bounds;
     }
-    
-    public void enemyHit(){
-        hasEnemyBeenHit = true;
-    }
-    
-    public boolean hasEnemyBeenHit(){
-        return hasEnemyBeenHit;
-    }
-    
-    public void enemyAttack(){
+
+    public void enemyAttack() {
         velocityY = -90;
-        moving = true;
     }
-    
-    public void enemyStopY(){
+
+    public void enemyStopY() {
         velocityY = 0;
         moving = false;
     }
-    
-    public void setY(float y){
+
+    public void setY(float y) {
         enemyY = y;
     }
     
-    public float getYPosition(){
-        return yPosition;
+    public float getOriginalY(){
+        return originalY;
     }
     
+    public void setMoving(){
+        moving = !moving;
+    }
     
+    public boolean isEnemyMoving(){
+        return moving;
+    }
     
+    public void fire(){
+        fired = !fired;
+    }
     
+    public boolean hasEnemyFired(){
+        return fired;
+    }
+    
+    public void leaveScreen(){
+        leftScreen = true;
+    }
+    
+    public boolean hasEnemyLeftScreen(){
+        return leftScreen;
+    }
+
 }

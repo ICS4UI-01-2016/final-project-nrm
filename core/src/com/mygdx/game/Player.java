@@ -21,6 +21,7 @@ public class Player {
     private float lastMissileFired = 0;
     private float lives;
     
+    
     public Player(int x, int y, int width, int height){
         lives = 3;
         playerX = x;

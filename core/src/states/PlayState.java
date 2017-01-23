@@ -47,6 +47,7 @@ public class PlayState extends State {
     private int score = 0;
     public BitmapFont font;
     private Texture lives;
+    private boolean areEnemiesAttacking;
 
     public PlayState(StateManager sm) {
         super(sm);
@@ -61,6 +62,7 @@ public class PlayState extends State {
         enemy = new Array<Enemy>();
         int count = 0;
         int y = 360;
+        areEnemiesAttacking = false;
         for (int i = 0; i < 10; i++) {
             enemy.add(new Enemy(50 + (count * 30), y));
             y = 390;
@@ -94,7 +96,6 @@ public class PlayState extends State {
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
         score = 0;
 
-
     }
 
     @Override
@@ -104,11 +105,9 @@ public class PlayState extends State {
 
         batch.begin();
 
-
         batch.draw(bg, getCameraX() - getViewWidth() / 2, getCameraY() - getViewHeight() / 2, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         font.draw(batch, " score: " + score, getViewWidth() - 150, getViewHeight() - 50);
         player.render(batch);
-
 
         for (int i = 0; i < missile.size; i++) {
             missile.get(i).render(batch);
@@ -118,7 +117,6 @@ public class PlayState extends State {
             enemyMissile.get(i).render(batch);
         }
 
-
         for (int i = 0; i < enemy.size; i++) {
             enemy.get(i).render(batch);
         }
@@ -126,7 +124,6 @@ public class PlayState extends State {
 //        for(int i = 0; i < 8; i++){
 //            redEnemy.get(i).render(batch);
 //      }
-
         //draw explosion
         for (int i = 0; i < explosion.size; i++) {
             explosion.get(i).render(batch);
@@ -141,7 +138,6 @@ public class PlayState extends State {
             batch.draw(lives, 5, 5);
         }
 
-
         batch.end();
     }
 
@@ -152,8 +148,6 @@ public class PlayState extends State {
         for (int i = 0; i < enemy.size; i++) {
             enemy.get(i).update(deltaTime);
         }
-
-
 
         enemytime += deltaTime;
         if (enemytime > 8) {
@@ -168,12 +162,10 @@ public class PlayState extends State {
             }
         }
 
-
         if (enemytime > 4) {
             for (int i = 0; i < enemy.size; i++) {
 
                 enemy.get(i).moveLeft();
-
 
             }
 
@@ -216,40 +208,52 @@ public class PlayState extends State {
                 }
             }
         }
-
-        if (player.getLives() == 0) {
+        
+        if(player.getLives()==0){
             //get the statemanager 
             StateManager gsm = getStateManager();
             //push on game screen
             gsm.set(new OverState(gsm));
         }
-
-        int count = 0;
-        float inty = enemy.get(count).getY();
-        enemy.get(count).enemyAttack();
-        boolean top = false;
-
-        if (enemy.get(count).getY() < 175 && enemy.get(count).getY() > 173) {
-            enemyMissile.add(new EnemyMissile(enemy.get(count).getX(), enemy.get(count).getY()));
+        
+        for(int i = 0; i < enemy.size; i++){
+            if(enemy.get(i).getY() != enemy.get(i).getOriginalY()){
+                enemy.get(i).setMoving();
+            }
         }
-        if (enemy.get(count).getY() < 0) {
-            enemy.get(count).setY(MyGdxGame.HEIGHT);
-            top = true;
+        for(int i = 0; i < enemy.size; i++){
+            if(enemy.get(i).getY() < 0){
+                enemy.get(i).leaveScreen();
+            }
         }
-        if (enemy.get(count).getY() <= enemy.get(count).getYPosition() && top == true) {
-            enemy.get(count).enemyStopY();
-            count += count;
+        //are enemies attacking?
+        if(!areEnemiesAttacking){
+            areEnemiesAttacking = !areEnemiesAttacking;
+            int enemyNumber = (int )(Math.random()*enemy.size);
+            enemyAttack(enemy.get(enemyNumber));
         }
+       
+        
+    }
     
-    Preferences pref=Gdx.app.getPreferences("highScore");
-    int highScore=pref.getInteger("highScore",0);
-    if(score>highScore){
-        pref.putInteger("hightScore", score);
-        pref.flush();
+    public void enemyAttack(Enemy e){
+        e.enemyAttack();
+        if(e.getY() < 200 && !e.hasEnemyFired()){
+            enemyMissile.add(new EnemyMissile(e.getX(), e.getY()));
+        }
+        if(e.hasEnemyLeftScreen()){
+            System.out.println("top");
+            e.setY(MyGdxGame.HEIGHT);
+        }
+        if(e.getY() < e.getOriginalY()){
+            e.enemyStopY();
+            e.setY(e.getOriginalY());
+        }
     }
     
     
-    }
+    
+    
 
     @Override
     public void handleInput() {
@@ -268,11 +272,14 @@ public class PlayState extends State {
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             player.playerHit();
         }
-
+        
     }
 
     @Override
     public void dispose() {
         player.dispose();
+        for(int i = 0; i < enemy.size; i++){
+            enemy.get(i).dispose();
+        }
     }
 }
