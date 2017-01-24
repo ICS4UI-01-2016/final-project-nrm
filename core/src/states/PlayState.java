@@ -18,7 +18,6 @@ import com.mygdx.game.EnemyMissile;
 
 import com.mygdx.game.Explosion;
 
-import com.mygdx.game.GreenEnemy;
 import com.mygdx.game.Missile;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Player;
@@ -35,7 +34,6 @@ public class PlayState extends State {
 
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
-    private Array<GreenEnemy> green;
     private Array<EnemyMissile> enemyMissile;
     private Player player;
     private SpriteBatch batch;
@@ -270,6 +268,33 @@ public class PlayState extends State {
         //update enemy attack
         if (areRedEnemiesAttacking) {
             redEnemyAttack(redEnemy.get(redEnemyNumber));
+        }
+        
+        for (int i = 0; i < enemyMissile.size; i++) {
+
+            if (enemyMissile.get(i).collides(player)) {
+                enemyMissile.clear();
+                explosion.add(new Explosion(player.getX(), player.getY()));
+                player.playerHit();
+
+            }
+        }
+        
+        Iterator<Enemy> itee = enemy.iterator();
+        while (itee.hasNext()) {
+            Enemy e = itee.next();
+            if (e.collides(player)) {
+                itee.remove();
+                player.playerHit();
+            }
+        }
+        Iterator<RedEnemy> itre = redEnemy.iterator();
+        while (itre.hasNext()) {
+            RedEnemy r = itre.next();
+            if (r.collides(player)) {
+                itre.remove();
+                player.playerHit();
+            }
         }
 
     }

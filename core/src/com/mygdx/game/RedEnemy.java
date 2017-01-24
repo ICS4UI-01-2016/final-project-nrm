@@ -121,5 +121,12 @@ public class RedEnemy {
     public boolean stopEnemy(){
         return enemyStop;
     }
+    
+    public boolean collides(Player p){
+        if(bounds.overlaps(p.getBounds())){
+            return true;
+        }
+        return false;
+    }
 
 }
