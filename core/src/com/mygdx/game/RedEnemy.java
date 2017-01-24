@@ -13,41 +13,113 @@ import com.badlogic.gdx.math.Rectangle;
  * @author voigr4865
  */
 public class RedEnemy {
-    
-    private Texture red;
-    
+
+    private Texture enemy;
     private Rectangle bounds;
-    
-    private int enemyX;
-    private int enemyY;
-    
-    public RedEnemy(int x, int y){
-        
+    private float enemyX;
+    private float enemyY;
+    private float velocityX;
+    private float velocityY;
+    private float originalY;
+    private boolean moving;
+    private boolean fired;
+    private boolean leftScreen;
+    private boolean enemyStop;
+
+    public RedEnemy(float x, float y) {
         enemyX = x;
         enemyY = y;
-        
-        red = new Texture("Galaga_Enemy2.png");
-        
-        
-        bounds = new Rectangle(enemyX, enemyY, red.getWidth(), red.getHeight());
-        
+        originalY = y;
+        enemy = new Texture("Galaga_Enemy2.png");
+        velocityX = 0;
+        velocityY = 0;
+        bounds = new Rectangle(enemyX, enemyY, enemy.getWidth(), enemy.getHeight());
+        moving = false;
+        fired = false;
+        enemyStop = false;
     }
-    
+
+    public void update(float deltaTime) {
+        enemyX += velocityX * deltaTime;
+        enemyY += velocityY * deltaTime;
+        bounds.setPosition(enemyX, enemyY);
+    }
+
     public void render(SpriteBatch batch) {
-        batch.draw(red, enemyX, enemyY);
-       
+        batch.draw(enemy, enemyX, enemyY);
+    }
+
+    public void dispose(){
+        enemy.dispose();
     }
     
-    public void update(float deltaTime){
-        
-        
+    public void moveLeft() {
+        velocityX = -90;
     }
-    
-    public int getX(){
+
+    public void moveRight() {
+        velocityX = 90;
+    }
+
+    public float getX() {
         return enemyX;
     }
-    
-    public int getY(){
+
+    public float getY() {
         return enemyY;
     }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void enemyAttack() {
+        velocityY = -90;
+    }
+
+    public void enemyStopY() {
+        velocityY = 0;
+        moving = false;
+    }
+
+    public void setY(float y) {
+        enemyY = y;
+    }
+    
+    public float getOriginalY(){
+        return originalY;
+    }
+    
+    public void setMoving(){
+        moving = !moving;
+    }
+    
+    public boolean isEnemyMoving(){
+        return moving;
+    }
+    
+    public void fire(){
+        fired = !fired;
+    }
+    
+    public boolean hasEnemyFired(){
+        return fired;
+    }
+    
+    public void leaveScreen(){
+        leftScreen = !leftScreen;
+    }
+    
+    public boolean hasEnemyLeftScreen(){
+        return leftScreen;
+    }
+    
+    public void timeToStop(){
+        enemyStop = true; 
+    }
+    
+    public boolean stopEnemy(){
+        return enemyStop;
+    }
+
 }

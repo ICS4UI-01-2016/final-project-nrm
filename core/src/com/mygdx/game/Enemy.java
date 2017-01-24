@@ -108,7 +108,6 @@ public class Enemy {
     
     public void leaveScreen(){
         leftScreen = !leftScreen;
-        System.out.println(leftScreen);
     }
     
     public boolean hasEnemyLeftScreen(){
