@@ -75,7 +75,7 @@ public class ControlState extends State {
         SmallFont.draw(batch, "Use left and right arrow keys to move", getViewWidth() - 550, getViewHeight() - 300);
         SmallFont.draw(batch, "Space to Shoot", getViewWidth() - 400, getViewHeight() - 400);
         //tell user to start 
-        font.draw(batch, "Press space to main menu", getViewWidth() - 600, getViewHeight() - 550);
+        SmallFont.draw(batch, "Press space to main menu", 125, getViewHeight() - 550);
         
 
         batch.end();
