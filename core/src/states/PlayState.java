@@ -7,6 +7,7 @@ package states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -29,9 +30,7 @@ import java.util.Iterator;
  * @author voigr4865
  */
 public class PlayState extends State {
-
     //instance variables
-
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
     private Array<EnemyMissile> enemyMissile;
@@ -51,7 +50,12 @@ public class PlayState extends State {
     private int enemyNumber;
     private boolean areRedEnemiesAttacking;
     private int redEnemyNumber;
-
+    private Music sound;
+    
+    /**
+     * constructor method for playstate
+     * @param sm statemanager to change states
+     */
     public PlayState(StateManager sm) {
         super(sm);
         player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
@@ -66,6 +70,7 @@ public class PlayState extends State {
         redEnemy = new Array<RedEnemy>();
         areEnemiesAttacking = false;
         areRedEnemiesAttacking = false;
+        
         
 
         //spawn in enemies
@@ -101,10 +106,17 @@ public class PlayState extends State {
         //set camera view
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
         score = 0;
+        //set the sound 
+       sound = Gdx.audio.newMusic(Gdx.files.internal("game.wav"));
+       //play the sound
+       sound.play();
 
     }
 
     @Override
+    /**
+     * method to draw game
+     */
     public void render(SpriteBatch batch) {
         batch.setProjectionMatrix(getCombinedCamera());
         batch.begin();
@@ -147,6 +159,9 @@ public class PlayState extends State {
     }
 
     @Override
+    /**
+     * method to update game
+     */
     public void update(float deltaTime) {
         //update player
         player.update(deltaTime);
@@ -242,7 +257,8 @@ public class PlayState extends State {
             //get the statemanager 
             StateManager gsm = getStateManager();
             //push on game screen
-            gsm.set(new OverState(gsm));
+            gsm.set(new OverState(gsm, score));
+            sound.stop();
         }
         //is the enemy moving
         for (int i = 0; i < enemy.size; i++) {
@@ -382,10 +398,6 @@ public class PlayState extends State {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.fire(System.currentTimeMillis())) {
             missile.add(new Missile(player.getX() + PLAYER_WIDTH / 2 - 3, player.getY() + PLAYER_HEIGHT));
         }
-        //remove a player life
-        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            player.playerHit();
-        }
 
     }
 
@@ -408,5 +420,6 @@ public class PlayState extends State {
         for(int i = 0; i < explosion.size; i++){
             explosion.get(i).dispose();
         }
+        sound.dispose();
     }
 }
