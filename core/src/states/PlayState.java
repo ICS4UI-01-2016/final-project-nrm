@@ -66,6 +66,7 @@ public class PlayState extends State {
         redEnemy = new Array<RedEnemy>();
         areEnemiesAttacking = false;
         areRedEnemiesAttacking = false;
+        
 
         //spawn in enemies
         int count = 0;
@@ -212,11 +213,30 @@ public class PlayState extends State {
                         it.remove();
                         ite.remove();
                         score = score + 50;
+                        if(e.isEnemyMoving()){
+                            areEnemiesAttacking = false;
+                        }
+                        break;
+                    }
+                Iterator<RedEnemy> itre = redEnemy.iterator();
+                while (itre.hasNext()) {
+                    RedEnemy r = itre.next();
+                    if (m.rCollides(r)) {
+                        explosion.add(new Explosion(r.getX(), r.getY()));
+                        it.remove();
+                        itre.remove();
+                        score = score + 100;
+                        if(r.isEnemyMoving()){
+                            areRedEnemiesAttacking = false;
+                        }
                         break;
                     }
                 }
             }
         }
+        }
+
+
         //if player runs out of lives game over go to game over screen
         if (player.getLives() == 0) {
             //get the statemanager 
@@ -271,7 +291,6 @@ public class PlayState extends State {
         }
         
         for (int i = 0; i < enemyMissile.size; i++) {
-
             if (enemyMissile.get(i).collides(player)) {
                 enemyMissile.clear();
                 explosion.add(new Explosion(player.getX(), player.getY()));
@@ -286,6 +305,7 @@ public class PlayState extends State {
             if (e.collides(player)) {
                 itee.remove();
                 player.playerHit();
+                explosion.add(new Explosion(player.getX(), player.getY()));
             }
         }
         Iterator<RedEnemy> itre = redEnemy.iterator();
@@ -294,7 +314,14 @@ public class PlayState extends State {
             if (r.collides(player)) {
                 itre.remove();
                 player.playerHit();
+                explosion.add(new Explosion(player.getX(), player.getY()));
             }
+        }
+        Preferences pref = Gdx.app.getPreferences("highscore");
+        int highScore = pref.getInteger("highscore", 0);
+        if(score > highScore){
+            pref.putInteger("highScore", score);
+            pref.flush();
         }
 
     }
@@ -314,6 +341,7 @@ public class PlayState extends State {
         if (r.getY() < r.getOriginalY() && r.stopEnemy()) {
             r.enemyStopY();
             r.setY(r.getOriginalY());
+            r.timeToStop();
             areRedEnemiesAttacking = false;
         }
     }
@@ -333,6 +361,7 @@ public class PlayState extends State {
         if (e.getY() < e.getOriginalY() && e.stopEnemy()) {
             e.enemyStopY();
             e.setY(e.getOriginalY());
+            e.timeToStop();
             areEnemiesAttacking = false;
         }
     }
@@ -367,6 +396,17 @@ public class PlayState extends State {
         for (int i = 0; i < enemy.size; i++) {
             enemy.get(i).dispose();
         }
-        
+        for (int i = 0; i < redEnemy.size; i++) {
+            redEnemy.get(i).dispose();
+        }
+        for(int i = 0; i < enemyMissile.size; i++){
+            enemyMissile.get(i).dispose();
+        }
+        for(int i = 0; i < missile.size; i++){
+            missile.get(i).dispose();
+        }
+        for(int i = 0; i < explosion.size; i++){
+            explosion.get(i).dispose();
+        }
     }
 }

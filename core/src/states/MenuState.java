@@ -65,11 +65,10 @@ public class MenuState extends State {
         SmallFont.setColor(com.badlogic.gdx.graphics.Color.GREEN);
 
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
-        
-        
-         Preferences pref=Gdx.app.getPreferences("hightScore");
+
+        Preferences pref = Gdx.app.getPreferences("hightScore");
         //finf int hihgscore if not set value to 0
-        highScore=pref.getInteger("highScore",0);
+        highScore = pref.getInteger("highScore", 0);
 
     }
 
@@ -81,15 +80,14 @@ public class MenuState extends State {
         batch.begin();
 
         batch.draw(bg, 0, 0, getViewWidth(), getViewHeight());
-        font.draw(batch, ""+ highScore, getViewWidth()/2, getViewHeight()-100);
+        font.draw(batch, "" + highScore, getViewWidth() / 2, getViewHeight() - 100);
         //draw the game "name" on the menue screen 
-//        font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
-        batch.draw(galaga, 150, 300, getViewWidth()-300, getViewHeight()-450);
-        
+        //font.draw(batch, "GALAGA", getViewWidth() - 400, getViewHeight() - 350);
+        batch.draw(galaga, 150, 300, getViewWidth() - 300, getViewHeight() - 450);
+
         font.draw(batch, "Press I for instructions", getViewWidth() - 575, getViewHeight() - 400);
         //tell user to "press enter to start the game.
         font.draw(batch, "Press space to play!", getViewWidth() - 575, getViewHeight() - 500);
-        
 
         batch.end();
     }
@@ -97,6 +95,7 @@ public class MenuState extends State {
     public void updateScore() {
         Preferences pref = Gdx.app.getPreferences("hightScore");
         highScore = pref.getInteger("highScore", 0);
+        System.out.println(highScore);
     }
 
     @Override

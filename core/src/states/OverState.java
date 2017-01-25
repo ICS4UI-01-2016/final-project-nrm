@@ -7,7 +7,9 @@ package states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.MyGdxGame;
 
 /**
@@ -18,6 +20,7 @@ public class OverState extends State {
 
     
     private Texture gameOver;
+    public BitmapFont font;
 
     public OverState(StateManager sm) {
         super(sm);
@@ -26,6 +29,20 @@ public class OverState extends State {
         gameOver = new Texture("game-over.png");
         
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+        
+        //create the font generator
+        FreeTypeFontGenerator fontGenerator = new //grab the font from the fonts avalible in assets 
+                FreeTypeFontGenerator(Gdx.files.internal("COOPBL.ttf"));
+        //create the new font type 
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new //actually generate the font         
+                FreeTypeFontGenerator.FreeTypeFontParameter();
+        //chaze the size of th font 
+        fontParameter.size = 44;
+
+        font = fontGenerator.generateFont(fontParameter);
+
+        //set camera view
+        font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
 
     }
 
@@ -36,9 +53,9 @@ public class OverState extends State {
 
         batch.begin();
 
-
+        
         batch.draw(gameOver, 0, 0, getViewWidth(), getViewHeight());
-
+        font.draw(batch, "press space to \nreturn to menu", 120, 200);
         batch.end();
     }
 
