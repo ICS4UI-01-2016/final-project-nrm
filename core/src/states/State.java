@@ -13,50 +13,105 @@ import com.badlogic.gdx.math.Matrix4;
  * @author joudn2217
  */
 public abstract class State {
+    //instance variables
     private OrthographicCamera cam;
     private StateManager stateManager;
     
-    public State(StateManager sm){
+    /**
+     * constructor for state
+     * @param sm statemanager to change state
+     */
+    public State(StateManager sm) {
+        //pass in cam and state manager
         cam = new OrthographicCamera();
         stateManager = sm;
     }
     
+    /**
+     * method to draw
+     * @param batch sprite batch to draw
+     */
     public abstract void render(SpriteBatch batch);
-    public abstract void update(float deltaTime);
-    public abstract void handleInput();
-    public abstract void dispose();
     
-    public StateManager getStateManager(){
+    /**
+     * method to update
+     * @param deltaTime time between updates
+     */
+    public abstract void update(float deltaTime);
+    
+    /**
+     * method to handle player input
+     */
+    public abstract void handleInput();
+
+    /**
+     * method to dispose of things
+     */
+    public abstract void dispose();
+
+    /**
+     * accessor for statemanger
+     * @return statemanager
+     */
+    public StateManager getStateManager() {
         return stateManager;
     }
-    
-    public OrthographicCamera getCamera(){
+    /**
+     * accessor for camera
+     * @return orthocam
+     */
+    public OrthographicCamera getCamera() {
         return cam;
     }
-    
-    public void setCameraView(float width, float height){
+
+    /**
+     * method to set camera view
+     * @param width camera width
+     * @param height camera height
+     */
+    public void setCameraView(float width, float height) {
         cam.setToOrtho(false, width, height);
         cam.update();
     }
     
-    public Matrix4 getCombinedCamera(){
+    /**
+     * method to get combined camera
+     * @return combined camera
+     */
+    public Matrix4 getCombinedCamera() {
         return cam.combined;
     }
-    
-    public float getCameraX(){
+
+    /**
+     * accessor for camera x
+     * @return camera x 
+     */
+    public float getCameraX() {
         return cam.position.x;
     }
-    
-    public float getCameraY(){
+
+    /**
+     * accessor for camera y
+     * @return camera y
+     */
+    public float getCameraY() {
         return cam.position.y;
     }
-    
-    public float getViewWidth(){
+
+    /**
+     * accessor for cam width
+     * @return cam width
+     */
+    public float getViewWidth() {
         return cam.viewportWidth;
     }
-    
-    public float getViewHeight(){
+
+    /**
+     * accessor for cam height
+     * @return cam height
+     */
+    public float getViewHeight() {
         return cam.viewportHeight;
     }
-    
+
 }

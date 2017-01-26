@@ -30,6 +30,7 @@ import java.util.Iterator;
  * @author voigr4865
  */
 public class PlayState extends State {
+
     //instance variables
     private Array<Enemy> enemy;
     private Array<RedEnemy> redEnemy;
@@ -37,7 +38,6 @@ public class PlayState extends State {
     private Player player;
     private SpriteBatch batch;
     private Texture bg;
-    private Texture getHit;
     private Array<Missile> missile;
     private Array<Explosion> explosion;
     public final int PLAYER_WIDTH = 28;
@@ -47,31 +47,41 @@ public class PlayState extends State {
     public BitmapFont font;
     private Texture lives;
     private boolean areEnemiesAttacking;
-    private int enemyNumber;
     private boolean areRedEnemiesAttacking;
+    private int enemyNumber;
     private int redEnemyNumber;
     private Music sound;
-    
+
     /**
      * constructor method for playstate
+     *
      * @param sm statemanager to change states
      */
     public PlayState(StateManager sm) {
+        //pass in statemanager
         super(sm);
+        //create a player
         player = new Player(MyGdxGame.WIDTH / 2 - PLAYER_WIDTH / 2, 50, PLAYER_WIDTH, PLAYER_HEIGHT);
+        //create a missile array
         missile = new Array<Missile>();
+        //create an explosion array
         explosion = new Array<Explosion>();
+        //create an enemy missile array
         enemyMissile = new Array<EnemyMissile>();
+        //set camera view
         setCameraView(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
+        //pass in background and lives texture
         bg = new Texture("Galaga_Background.png");
         lives = new Texture("Galaga_Fighter.png");
+        //pass in batch
         batch = new SpriteBatch();
+        //create an enemy array
         enemy = new Array<Enemy>();
+        //create a red enemy array
         redEnemy = new Array<RedEnemy>();
+        //set enemy attacking to false
         areEnemiesAttacking = false;
         areRedEnemiesAttacking = false;
-        
-        
 
         //spawn in enemies
         int count = 0;
@@ -107,9 +117,9 @@ public class PlayState extends State {
         font.setColor(com.badlogic.gdx.graphics.Color.GREEN);
         score = 0;
         //set the sound 
-       sound = Gdx.audio.newMusic(Gdx.files.internal("game.wav"));
-       //play the sound
-       sound.play();
+        sound = Gdx.audio.newMusic(Gdx.files.internal("game.wav"));
+        //play the sound
+        sound.play();
 
     }
 
@@ -213,7 +223,7 @@ public class PlayState extends State {
                 itex.remove();
             }
         }
-        //remove enemy and missile when they collide
+        //remove enemy or red enemy and missile when they collide
         Iterator<Missile> it = missile.iterator();
         while (it.hasNext()) {
             Missile m = it.next();
@@ -228,29 +238,28 @@ public class PlayState extends State {
                         it.remove();
                         ite.remove();
                         score = score + 50;
-                        if(e.isEnemyMoving()){
+                        if (e.isEnemyMoving()) {
                             areEnemiesAttacking = false;
                         }
                         break;
                     }
-                Iterator<RedEnemy> itre = redEnemy.iterator();
-                while (itre.hasNext()) {
-                    RedEnemy r = itre.next();
-                    if (m.rCollides(r)) {
-                        explosion.add(new Explosion(r.getX(), r.getY()));
-                        it.remove();
-                        itre.remove();
-                        score = score + 100;
-                        if(r.isEnemyMoving()){
-                            areRedEnemiesAttacking = false;
+                    Iterator<RedEnemy> itre = redEnemy.iterator();
+                    while (itre.hasNext()) {
+                        RedEnemy r = itre.next();
+                        if (m.rCollides(r)) {
+                            explosion.add(new Explosion(r.getX(), r.getY()));
+                            it.remove();
+                            itre.remove();
+                            score = score + 100;
+                            if (r.isEnemyMoving()) {
+                                areRedEnemiesAttacking = false;
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
         }
-        }
-
 
         //if player runs out of lives game over go to game over screen
         if (player.getLives() == 0) {
@@ -282,7 +291,7 @@ public class PlayState extends State {
         if (areEnemiesAttacking) {
             enemyAttack(enemy.get(enemyNumber));
         }
-        
+
         // is the red enemy moving
         for (int i = 0; i < redEnemy.size; i++) {
             if (redEnemy.get(i).getY() != redEnemy.get(i).getOriginalY()) {
@@ -305,7 +314,7 @@ public class PlayState extends State {
         if (areRedEnemiesAttacking) {
             redEnemyAttack(redEnemy.get(redEnemyNumber));
         }
-        
+        //remove enemy missile, a life and create an explosion if enemy missile hits player
         for (int i = 0; i < enemyMissile.size; i++) {
             if (enemyMissile.get(i).collides(player)) {
                 enemyMissile.clear();
@@ -314,7 +323,7 @@ public class PlayState extends State {
 
             }
         }
-        
+        //remove enemy a life and create explosion if enemy and player collide
         Iterator<Enemy> itee = enemy.iterator();
         while (itee.hasNext()) {
             Enemy e = itee.next();
@@ -324,6 +333,7 @@ public class PlayState extends State {
                 explosion.add(new Explosion(player.getX(), player.getY()));
             }
         }
+        //remove red enemy a life and create explosion if red enemy and player collide
         Iterator<RedEnemy> itre = redEnemy.iterator();
         while (itre.hasNext()) {
             RedEnemy r = itre.next();
@@ -333,27 +343,34 @@ public class PlayState extends State {
                 explosion.add(new Explosion(player.getX(), player.getY()));
             }
         }
+        //get/set highscore
         Preferences pref = Gdx.app.getPreferences("highscore");
         int highScore = pref.getInteger("highscore", 0);
-        if(score > highScore){
+        if (score > highScore) {
             pref.putInteger("highScore", score);
             pref.flush();
         }
 
     }
+
     //red enemy attack method
-    public void redEnemyAttack(RedEnemy r) {
+    private void redEnemyAttack(RedEnemy r) {
+        //send enemy forward
         r.enemyAttack();
+
+        //fire missile
         if (r.getY() < 200 && !r.hasEnemyFired()) {
             enemyMissile.add(new EnemyMissile(r.getX(), r.getY()));
             r.fire();
         }
+        //set to top of screen
         if (r.hasEnemyLeftScreen()) {
             r.setY(MyGdxGame.HEIGHT);
             r.leaveScreen();
             r.timeToStop();
 
         }
+        //stop enemy 
         if (r.getY() < r.getOriginalY() && r.stopEnemy()) {
             r.enemyStopY();
             r.setY(r.getOriginalY());
@@ -361,19 +378,25 @@ public class PlayState extends State {
             areRedEnemiesAttacking = false;
         }
     }
+
     //enemy attack method
-    public void enemyAttack(Enemy e) {
+    private void enemyAttack(Enemy e) {
         e.enemyAttack();
+
+        //make enemy fire
         if (e.getY() < 200 && !e.hasEnemyFired()) {
             enemyMissile.add(new EnemyMissile(e.getX(), e.getY()));
             e.fire();
         }
+        //set enemy to top of screen when they leave
         if (e.hasEnemyLeftScreen()) {
             e.setY(MyGdxGame.HEIGHT);
             e.leaveScreen();
             e.timeToStop();
 
         }
+
+        //stop enemy in original position
         if (e.getY() < e.getOriginalY() && e.stopEnemy()) {
             e.enemyStopY();
             e.setY(e.getOriginalY());
@@ -383,6 +406,9 @@ public class PlayState extends State {
     }
 
     @Override
+    /**
+     * method to handle player input
+     */
     public void handleInput() {
         //player move right
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.getX() + PLAYER_WIDTH < MyGdxGame.WIDTH) {
@@ -402,7 +428,9 @@ public class PlayState extends State {
     }
 
     @Override
-    //dispose
+    /**
+     * method to dispose of things
+     */
     public void dispose() {
         player.dispose();
         for (int i = 0; i < enemy.size; i++) {
@@ -411,15 +439,17 @@ public class PlayState extends State {
         for (int i = 0; i < redEnemy.size; i++) {
             redEnemy.get(i).dispose();
         }
-        for(int i = 0; i < enemyMissile.size; i++){
+        for (int i = 0; i < enemyMissile.size; i++) {
             enemyMissile.get(i).dispose();
         }
-        for(int i = 0; i < missile.size; i++){
+        for (int i = 0; i < missile.size; i++) {
             missile.get(i).dispose();
         }
-        for(int i = 0; i < explosion.size; i++){
+        for (int i = 0; i < explosion.size; i++) {
             explosion.get(i).dispose();
         }
+        lives.dispose();
+        bg.dispose();
         sound.dispose();
     }
 }

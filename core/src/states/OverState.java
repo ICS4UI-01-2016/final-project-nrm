@@ -18,16 +18,22 @@ import com.mygdx.game.MyGdxGame;
  * @author voigr4865
  */
 public class OverState extends State {
-   //instance varibles 
+
+    //instance varibles
     private BitmapFont font;
     private Texture gameOver;
     private int score;
     private Sound sound;
-
+    
+    /**
+     * constructor for game over state
+     * @param sm statemanager to change states
+     * @param score score to use as final score
+     */
     public OverState(StateManager sm, int score) {
+        //pass in state manager, score and texture game over
         super(sm);
         this.score = score;
-
         gameOver = new Texture("game-over.png");
         //create the font generator
         FreeTypeFontGenerator fontGenerator = new //grab the font from the fonts avalible in assets 
@@ -41,11 +47,9 @@ public class OverState extends State {
         fontParameter.size = 24;
         //acutlly sett he font into the "font" variable 
         font = fontGenerator.generateFont(fontParameter);
-
         //set the font color
         font.setColor(com.badlogic.gdx.graphics.Color.ORANGE);
-        //set the camera view 
-        
+        //set the camera view
         sound = Gdx.audio.newSound(Gdx.files.internal("gameover.mp3"));
         //play the sound
         sound.play();
@@ -54,36 +58,48 @@ public class OverState extends State {
     }
 
     @Override
+    /**
+     * method to draw game over screen
+     */
     public void render(SpriteBatch batch) {
-
         batch.setProjectionMatrix(getCombinedCamera());
-
         batch.begin();
-
+        //draw gameover
         batch.draw(gameOver, 0, 0, getViewWidth(), getViewHeight());
-       font.draw(batch, " Game Score: " + score, getViewWidth() / 2-100, getViewHeight() - 100);
-       font.draw(batch, "press space to return to menu", getViewWidth()/2-200, getViewHeight() - 500);
-
+        //draw score
+        font.draw(batch, " Game Score: " + score, getViewWidth() / 2 - 100, getViewHeight() - 100);
+        //draw instructions
+        font.draw(batch, "press space to return to menu", getViewWidth() / 2 - 200, getViewHeight() - 500);
         batch.end();
     }
 
     @Override
+    /**
+     * method to update overstate
+     */
     public void update(float deltaTime) {
     }
 
     @Override
+    /**
+     * method to handle player input
+     */
     public void handleInput() {
-
+        //if space is pressed
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             //get the statemanager 
             StateManager gsm = getStateManager();
+            //stop sound
             sound.stop();
-
+            //set menu state
             gsm.set(new MenuState(gsm));
         }
     }
 
     @Override
+    /**
+     * method to dispose of things needing disposing
+     */
     public void dispose() {
         gameOver.dispose();
     }
